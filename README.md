@@ -1,24 +1,26 @@
-# README
+# User Service
+This is a service that maintains users. It exposes both a React UI and APIs for interacting with the users. 
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+For the moment the app just serves a simple HelloWorld page defined from the 
+following [tutorial](https://www.shakacode.com/react-on-rails/docs/guides/tutorial/). 
+This helped get react working from being served from a rails server.
 
-Things you may want to cover:
+# Tools
+These are defined in the [asdf](https://asdf-vm.com/) `.tool-versions` file. Asdf is a tool that allows for 
+multiple versions of a given tool (coding language in our case) to be used on a single machine. It is not required. 
+- Ruby: 3.3.1
+- Nodejs: 22.5.1
 
-* Ruby version
 
-* System dependencies
+# How to run local
+```
+# install dependencies
+bundle install
 
-* Configuration
+# create the database
+rails db:create
+rails db:migrate
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+# run the server
+./bin/dev
+```
