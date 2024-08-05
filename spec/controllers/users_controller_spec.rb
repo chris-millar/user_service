@@ -30,6 +30,17 @@ RSpec.describe "UsersController", type: :request do
           "city" => existing_user.city
         )
       end
+
+      it "aliases timestamps as date_created and date_updated and formats them as iso8601" do
+        headers = { "ACCEPT" => "application/json" }
+        get "/users/#{existing_user.id}", headers: headers
+
+        response_json = JSON.parse(response.body)
+        expect(response_json).to include(
+          "date_created" => existing_user.created_at.iso8601,
+          "date_updated" => existing_user.updated_at.iso8601
+        )
+      end
     end
   end
 end

@@ -43,3 +43,4 @@ group :test do
   gem "selenium-webdriver"
   gem "rspec-rails"
 end
+gem "active_model_serializers", "~> 0.10.14"
