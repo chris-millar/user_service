@@ -13,7 +13,16 @@ module ApiFiltering
     def permitted_params
       restrictions = @@_configured_filters.reduce({permit: [], require: []}) do |acc, configured_filter|
         restriction = configured_filter.optional ? :permit : :require
-        field = configured_filter.type == Array ? [configured_filter.name => []] : [configured_filter.name]
+        field = if configured_filter.type == Array
+          # permit as a non-array if a single value was provided instead of an array
+          if params[configured_filter.name].present? && !params[configured_filter.name].is_a?(Array)
+            [configured_filter.name]
+          else
+            [configured_filter.name => []]
+          end
+        else
+           [configured_filter.name]
+        end
         acc[restriction] << field
 
         acc
