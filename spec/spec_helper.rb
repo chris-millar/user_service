@@ -1,4 +1,5 @@
 require 'json_spec_helper'
+require 'support/factory_bot'
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
@@ -12,4 +13,5 @@ RSpec.configure do |config|
   config.shared_context_metadata_behavior = :apply_to_host_groups
   # config.order = :random
   config.include JsonSpecHelper, :type => :request
+  # config.include FactoryBot::Syntax::Methods
 end

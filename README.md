@@ -31,7 +31,7 @@ Todo:
 - [x] add User model
 - [x] add show endpoint
 - [x] Handle errors in UsersController#show
-- [ ] add FactoryBot for testing
+- [x] add FactoryBot for testing
 - [ ] Implement UsersController#index
 - [ ] Implement date created range filter for UsersController#index
 - [ ] Implement profession filter for UsersController#index

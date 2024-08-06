@@ -3,17 +3,7 @@ require "rails_helper"
 RSpec.describe "UsersController", type: :request do
   context "#show" do
     context "when the requested user exists" do
-      let!(:existing_user) {
-        User.create(
-          first_name: "Alice",
-          last_name: "Smith",
-          email: "alice.smith@email.com",
-          profession: "writer",
-          country: "United Kingdom",
-          city: "London",
-          created_at: Time.new(2024, 1, 12, 5, 0, 0)
-        )
-      }
+      let!(:existing_user) { create(:user) }
 
       it "returns the requested user as json" do
         get "/users/#{existing_user.id}", headers: api_headers
