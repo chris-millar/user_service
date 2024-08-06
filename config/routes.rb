@@ -1,9 +1,14 @@
 Rails.application.routes.draw do
-  get 'hello_world', to: 'hello_world#index'
+  namespace :app do
+    root to: "hello_world#index"
+    get 'hello_world', to: "hello_world#index"
+  end
 
-  resources :users, only: [:show]
+  namespace :api do
+    resources :users, only: [:index, :show]
+  end
 
   get "up" => "rails/health#show", as: :rails_health_check
 
-  root "hello_world#index"
+  root :to => redirect("/app")
 end

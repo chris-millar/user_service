@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "UsersController", type: :request do
+RSpec.describe "Api::UsersController", type: :request do
   context "#show" do
     context "when the requested user exists" do
       let!(:existing_user) { create(:user) }
