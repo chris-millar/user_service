@@ -51,7 +51,7 @@ RSpec.describe "Api::UsersController", type: :request do
 
           expect(response.status).to eq(200)
           expect(response_json[:data].size).to eq(Api::PaginationHelper.limit)
-          expect(response_json[:metadata]).to include(
+          expect(response_json[:metadata][:paging]).to include(
             page: 1,
             prev: nil,
             next: 2,
@@ -66,7 +66,7 @@ RSpec.describe "Api::UsersController", type: :request do
 
           expect(response.status).to eq(200)
           expect(response_json[:data].size).to eq(1)
-          expect(response_json[:metadata]).to include(
+          expect(response_json[:metadata][:paging]).to include(
             page: 2,
             prev: 1,
             next: nil,
@@ -84,7 +84,7 @@ RSpec.describe "Api::UsersController", type: :request do
 
         expect(response.status).to eq(200)
         expect(response_json[:data].size).to eq(Api::PaginationHelper.limit - 1)
-        expect(response_json[:metadata]).to include(
+        expect(response_json[:metadata][:paging]).to include(
           page: 1,
           prev: nil,
           next: nil,
@@ -101,7 +101,7 @@ RSpec.describe "Api::UsersController", type: :request do
 
         expect(response.status).to eq(200)
         expect(response_json[:data].size).to eq(0)
-        expect(response_json[:metadata]).to include(
+        expect(response_json[:metadata][:paging]).to include(
           page: 1,
           prev: nil,
           next: nil,
@@ -113,6 +113,12 @@ RSpec.describe "Api::UsersController", type: :request do
     end
 
     context "with query filtering" do
+      it "returns empty filtering metadata if no filters applied" do
+        get "/api/users", headers: api_headers, params: { }
+        expect(response.status).to eq(200)
+        expect(response_json[:metadata][:filters]).to eq({})
+      end
+
       context "on profession" do
         let!(:programmer_users) { create_list(:user, Api::PaginationHelper.limit + 1, profession: "programmer") }
         let!(:doctor_users) { create_list(:user, Api::PaginationHelper.limit + 2, profession: "doctor") }
@@ -123,7 +129,7 @@ RSpec.describe "Api::UsersController", type: :request do
           get "/api/users", headers: api_headers, params: { profession: ["writer"], first_name: "bob"}
 
           expect(response.status).to eq(200)
-          expect(response_json[:metadata][:count]).to eq(writer_users.size)
+          expect(response_json[:metadata][:paging][:count]).to eq(writer_users.size)
           expect(response_json[:data].all? { |user| user[:profession] === "writer" }).to be(true)
         end
 
@@ -133,7 +139,7 @@ RSpec.describe "Api::UsersController", type: :request do
           get "/api/users", headers: api_headers, params: { profession: %w[writer programmer] }
 
           expect(response.status).to eq(200)
-          expect(response_json[:metadata][:count]).to eq(writer_users.size + programmer_users.size)
+          expect(response_json[:metadata][:paging][:count]).to eq(writer_users.size + programmer_users.size)
           expect(response_json[:data].all? { |user| %w[writer programmer].include?(user[:profession]) }).to be(true)
         end
 
@@ -141,7 +147,7 @@ RSpec.describe "Api::UsersController", type: :request do
           get "/api/users", headers: api_headers, params: { }
 
           expect(response.status).to eq(200)
-          expect(response_json[:metadata][:count]).to eq(User.count)
+          expect(response_json[:metadata][:paging][:count]).to eq(User.count)
         end
 
         it "ignores unknown professions" do
@@ -150,14 +156,21 @@ RSpec.describe "Api::UsersController", type: :request do
           get "/api/users", headers: api_headers, params: { profession: %w[writer made_up_profession] }
 
           expect(response.status).to eq(200)
-          expect(response_json[:metadata][:count]).to eq(writer_users.size)
+          expect(response_json[:metadata][:paging][:count]).to eq(writer_users.size)
           expect(response_json[:data].all? { |user| user[:profession] === "writer" }).to be(true)
         end
 
         it "can return no results" do
           get "/api/users", headers: api_headers, params: { profession: %w[made_up_profession] }
           expect(response.status).to eq(200)
-          expect(response_json[:metadata][:count]).to eq(0)
+          expect(response_json[:metadata][:paging][:count]).to eq(0)
+        end
+
+        it "specifies the filter criteria in the response metadata" do
+          get "/api/users", headers: api_headers, params: { profession: %w[programmer] }
+          expect(response.status).to eq(200)
+          expect(response_json[:metadata][:paging][:count]).to eq(programmer_users.size)
+          expect(response_json[:metadata][:filters]).to include({ profession: { value: %w[programmer], operator: "in"}})
         end
       end
     end

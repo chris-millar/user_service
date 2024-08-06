@@ -8,13 +8,23 @@ class Api::UsersController < ApplicationController
 
   def index
     @pagy, @users = pagy(users_requested)
-    render json: paged_json_with_meta(pagy: @pagy, records: @users)
+    render json: paged_json_with_meta(records: @users, paging: @pagy, filters: @applied_filters)
   end
 
   def users_requested
-    return User.where(profession: profession) if profession.present?
+    apply_filters(User.all)
+  end
 
-    User.all
+  def apply_filters(base_scope)
+    @applied_filters = {}
+    filtered_scope = base_scope
+
+    if profession.present?
+      filtered_scope = filtered_scope.where(profession: profession)
+      @applied_filters[:profession] = { value: profession, operator: :in }
+    end
+
+    filtered_scope
   end
 
   def profession
