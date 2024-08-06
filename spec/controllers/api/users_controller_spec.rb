@@ -42,8 +42,67 @@ RSpec.describe "Api::UsersController", type: :request do
   end
 
   context "#index" do
-    context "with no query filtering" do
-      # it "returns"
+    context "with no query filtering (other than paging)" do
+      context "when there are multiple pages worth of Users" do
+        let!(:users) { create_list(:user, Api::PaginationHelper.limit + 1) }
+
+        it "returns paginated results for first page" do
+          get "/api/users", headers: api_headers
+
+          expect(response.status).to eq(200)
+          expect(response_json[:data].size).to eq(Api::PaginationHelper.limit)
+          expect(response_json[:metadata]).to include(
+            page: 1,
+            prev: nil,
+            next: 2,
+            last: 2
+          )
+        end
+
+        it "returns additional pages when queried" do
+          get "/api/users?page=2", headers: api_headers
+
+          expect(response.status).to eq(200)
+          expect(response_json[:data].size).to eq(1)
+          expect(response_json[:metadata]).to include(
+            page: 2,
+            prev: 1,
+            next: nil,
+            last: 2
+          )
+        end
+      end
+
+      it "returns paginated results even for a single page" do
+        create_list(:user, Api::PaginationHelper.limit - 1)
+
+        get "/api/users", headers: api_headers
+
+        expect(response.status).to eq(200)
+        expect(response_json[:data].size).to eq(Api::PaginationHelper.limit - 1)
+        expect(response_json[:metadata]).to include(
+          page: 1,
+          prev: nil,
+          next: nil,
+          last: 1
+        )
+      end
+
+      it "returns empty results when there are no Users" do
+        User.all.each { |user| user.destroy }
+
+        get "/api/users", headers: api_headers
+
+        expect(response.status).to eq(200)
+        expect(response_json[:data].size).to eq(0)
+        expect(response_json[:metadata]).to include(
+          page: 1,
+          prev: nil,
+          next: nil,
+          last: 1
+        )
+      end
+
     end
   end
 end
