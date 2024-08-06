@@ -1,4 +1,7 @@
 class Api::UsersController < ApplicationController
+  include ApiFiltering
+  filter :profession, :optional, type: Array, operator: :in
+
   def show
     @user ||= User.find(params[:id])
     render json: @user
@@ -7,7 +10,11 @@ class Api::UsersController < ApplicationController
   end
 
   def index
-    @pagy, @users = pagy(User.all)
-    render json: paged_json_with_meta(pagy: @pagy, records: @users)
+    @pagy, @users = pagy(users_requested)
+    render json: paged_json_with_meta(records: @users, paging: @pagy, filters: applied_filters)
+  end
+
+  def users_requested
+    apply_filters(User.all)
   end
 end
