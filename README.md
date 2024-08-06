@@ -44,7 +44,7 @@ Todo:
 - [ ] Implement date created range filter for UsersController#index
 - [ ] Implement profession filter for UsersController#index
 - [ ] decide on custom endpoint + implement
-- [ ] write import script (or do this as the other endpoint?)
+- [x] write import script (or do this as the other endpoint?)
 - [ ] UX: create User component
 - [ ] UX: create list view of Users
 - [ ] UX: create filter for date range
