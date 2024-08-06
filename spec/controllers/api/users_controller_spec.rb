@@ -110,7 +110,56 @@ RSpec.describe "Api::UsersController", type: :request do
           pages: 1
         )
       end
+    end
 
+    context "with query filtering" do
+      context "on profession" do
+        let!(:programmer_users) { create_list(:user, Api::PaginationHelper.limit + 1, profession: "programmer") }
+        let!(:doctor_users) { create_list(:user, Api::PaginationHelper.limit + 2, profession: "doctor") }
+
+        it "returns all Users with the matching profession" do
+          writer_users = create_list(:user, Api::PaginationHelper.limit - 1, profession: "writer")
+
+          get "/api/users", headers: api_headers, params: { profession: ["writer"], first_name: "bob"}
+
+          expect(response.status).to eq(200)
+          expect(response_json[:metadata][:count]).to eq(writer_users.size)
+          expect(response_json[:data].all? { |user| user[:profession] === "writer" }).to be(true)
+        end
+
+        it "can filter by more than 1 profession at a time" do
+          writer_users = create_list(:user, Api::PaginationHelper.limit - 1, profession: "writer")
+
+          get "/api/users", headers: api_headers, params: { profession: %w[writer programmer] }
+
+          expect(response.status).to eq(200)
+          expect(response_json[:metadata][:count]).to eq(writer_users.size + programmer_users.size)
+          expect(response_json[:data].all? { |user| %w[writer programmer].include?(user[:profession]) }).to be(true)
+        end
+
+        it "is optional" do
+          get "/api/users", headers: api_headers, params: { }
+
+          expect(response.status).to eq(200)
+          expect(response_json[:metadata][:count]).to eq(User.count)
+        end
+
+        it "ignores unknown professions" do
+          writer_users = create_list(:user, Api::PaginationHelper.limit - 1, profession: "writer")
+
+          get "/api/users", headers: api_headers, params: { profession: %w[writer made_up_profession] }
+
+          expect(response.status).to eq(200)
+          expect(response_json[:metadata][:count]).to eq(writer_users.size)
+          expect(response_json[:data].all? { |user| user[:profession] === "writer" }).to be(true)
+        end
+
+        it "can return no results" do
+          get "/api/users", headers: api_headers, params: { profession: %w[made_up_profession] }
+          expect(response.status).to eq(200)
+          expect(response_json[:metadata][:count]).to eq(0)
+        end
+      end
     end
   end
 end
