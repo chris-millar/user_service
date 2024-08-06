@@ -16,7 +16,7 @@ RSpec.describe "Importer" do
         expect(user.first_name).to eq("Rafael")
         expect(user.last_name).to eq("DuBuque")
         expect(user.email).to eq("rafael.dubuque@kirlin.example")
-        expect(user.profession).to eq("Farming")
+        expect(user.profession).to eq("farming")
         expect(user.created_at).to eq(DateTime.parse("2024-08-06"))
         expect(user.country).to eq("Holy See (Vatican City State)")
         expect(user.city).to eq("Deckowfurt")
