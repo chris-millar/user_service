@@ -126,10 +126,13 @@ RSpec.describe "Api::UsersController", type: :request do
         it "returns all Users with the matching profession" do
           writer_users = create_list(:user, Api::PaginationHelper.limit - 1, profession: "writer")
 
-          get "/api/users", headers: api_headers, params: { profession: ["writer"], first_name: "bob"}
+          get "/api/users", headers: api_headers, params: { profession: ["writer"], first_name: "bob" }
 
           expect(response.status).to eq(200)
           expect(response_json[:metadata][:paging][:count]).to eq(writer_users.size)
+          expect(response_json[:metadata][:filters]).to include(
+            profession: { value: ["writer"], operator: "in" }
+          )
           expect(response_json[:data].all? { |user| user[:profession] === "writer" }).to be(true)
         end
 
