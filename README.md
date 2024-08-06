@@ -12,7 +12,7 @@ multiple versions of a given tool (coding language in our case) to be used on a 
 - Nodejs: 22.5.1
 
 
-# How to run local
+# Setup
 ```
 # install dependencies
 bundle install
@@ -20,7 +20,15 @@ bundle install
 # create the database
 rails db:create
 rails db:migrate
+```
 
+# Run tests
+```
+rspec
+```
+
+# Run local
+```
 # run the server
 ./bin/dev
 ```
@@ -36,7 +44,7 @@ Todo:
 - [ ] Implement date created range filter for UsersController#index
 - [ ] Implement profession filter for UsersController#index
 - [ ] decide on custom endpoint + implement
-- [ ] write import script (or do this as the other endpoint?)
+- [x] write import script (or do this as the other endpoint?)
 - [ ] UX: create User component
 - [ ] UX: create list view of Users
 - [ ] UX: create filter for date range

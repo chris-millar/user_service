@@ -42,3 +42,6 @@ yarn-debug.log*
 .yarn-integrity
 
 /.idea
+
+# place to have temporary scaps of code or notes while I am working
+junk.md
