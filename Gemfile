@@ -25,11 +25,12 @@ gem "bootsnap", require: false
 
 gem "react_on_rails", "~> 14.0"
 gem "shakapacker", "~> 8.0"
-gem 'dotenv-rails', groups: [:development, :test]
+gem "active_model_serializers", "~> 0.10.14"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ]
+  gem 'dotenv-rails'
 end
 
 group :development do
@@ -41,4 +42,7 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+  gem "rspec-rails"
+  gem "factory_bot_rails"
+  gem "faker"
 end

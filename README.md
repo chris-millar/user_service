@@ -24,3 +24,22 @@ rails db:migrate
 # run the server
 ./bin/dev
 ```
+
+
+Todo:
+- [x] get app started with react served
+- [x] add User model
+- [x] add show endpoint
+- [x] Handle errors in UsersController#show
+- [x] add FactoryBot for testing
+- [ ] Implement UsersController#index
+- [ ] Implement date created range filter for UsersController#index
+- [ ] Implement profession filter for UsersController#index
+- [ ] decide on custom endpoint + implement
+- [ ] write import script (or do this as the other endpoint?)
+- [ ] UX: create User component
+- [ ] UX: create list view of Users
+- [ ] UX: create filter for date range
+- [ ] UX: create profession filter
+- [ ] UX: for custom endpoint(s)
+- [ ] reproducible deployment
