@@ -55,12 +55,14 @@ RSpec.describe "Api::UsersController", type: :request do
             page: 1,
             prev: nil,
             next: 2,
-            last: 2
+            last: 2,
+            count: users.size,
+            pages: 2
           )
         end
 
         it "returns additional pages when queried" do
-          get "/api/users?page=2", headers: api_headers
+          get "/api/users", headers: api_headers, params: { page: 2 }
 
           expect(response.status).to eq(200)
           expect(response_json[:data].size).to eq(1)
@@ -68,13 +70,15 @@ RSpec.describe "Api::UsersController", type: :request do
             page: 2,
             prev: 1,
             next: nil,
-            last: 2
+            last: 2,
+            count: users.size,
+            pages: 2
           )
         end
       end
 
       it "returns paginated results even for a single page" do
-        create_list(:user, Api::PaginationHelper.limit - 1)
+        users = create_list(:user, Api::PaginationHelper.limit - 1)
 
         get "/api/users", headers: api_headers
 
@@ -84,7 +88,9 @@ RSpec.describe "Api::UsersController", type: :request do
           page: 1,
           prev: nil,
           next: nil,
-          last: 1
+          last: 1,
+          count: users.size,
+          pages: 1
         )
       end
 
@@ -99,7 +105,9 @@ RSpec.describe "Api::UsersController", type: :request do
           page: 1,
           prev: nil,
           next: nil,
-          last: 1
+          last: 1,
+          count: 0,
+          pages: 1
         )
       end
 
