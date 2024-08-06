@@ -30,7 +30,7 @@ Todo:
 - [x] get app started with react served
 - [x] add User model
 - [x] add show endpoint
-- [ ] Handle errors in UsersController#show
+- [x] Handle errors in UsersController#show
 - [ ] add FactoryBot for testing
 - [ ] Implement UsersController#index
 - [ ] Implement date created range filter for UsersController#index
