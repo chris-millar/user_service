@@ -32,7 +32,7 @@ Todo:
 - [x] add show endpoint
 - [x] Handle errors in UsersController#show
 - [x] add FactoryBot for testing
-- [ ] Implement UsersController#index
+- [x] Implement UsersController#index
 - [ ] Implement date created range filter for UsersController#index
 - [ ] Implement profession filter for UsersController#index
 - [ ] decide on custom endpoint + implement

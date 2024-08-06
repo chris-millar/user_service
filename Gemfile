@@ -26,6 +26,7 @@ gem "bootsnap", require: false
 gem "react_on_rails", "~> 14.0"
 gem "shakapacker", "~> 8.0"
 gem "active_model_serializers", "~> 0.10.14"
+gem 'pagy'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
