@@ -6,10 +6,10 @@ RSpec.describe "Api::UsersController", type: :request do
       let!(:existing_user) { create(:user) }
 
       it "returns the requested user as json" do
-        get "/users/#{existing_user.id}", headers: api_headers
+        get "/api/users/#{existing_user.id}", headers: api_headers
 
         expect(response.status).to eq(200)
-        expect(response_json).to include(
+        expect(response_json[:user]).to include(
           first_name: existing_user.first_name,
           last_name: existing_user.last_name,
           email: existing_user.email,
@@ -20,9 +20,9 @@ RSpec.describe "Api::UsersController", type: :request do
       end
 
       it "aliases timestamps as date_created and date_updated and formats them as iso8601" do
-        get "/users/#{existing_user.id}", headers: api_headers
+        get "/api/users/#{existing_user.id}", headers: api_headers
 
-        expect(response_json).to include(
+        expect(response_json[:user]).to include(
           date_created: existing_user.created_at.iso8601,
           date_updated: existing_user.updated_at.iso8601
         )
@@ -31,13 +31,19 @@ RSpec.describe "Api::UsersController", type: :request do
 
     context "when the requested user is not found" do
       it "returns a 404 error payload" do
-        get "/users/1", headers: api_headers
+        get "/api/users/1", headers: api_headers
 
         expect(response.status).to eq(404)
         expect(response_json).to include(
           error: "No record found!",
         )
       end
+    end
+  end
+
+  context "#index" do
+    context "with no query filtering" do
+      # it "returns"
     end
   end
 end
