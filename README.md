@@ -41,7 +41,7 @@ Todo:
 - [x] Handle errors in UsersController#show
 - [x] add FactoryBot for testing
 - [x] Implement UsersController#index
-- [ ] Implement date created range filter for UsersController#index
+- [x] Implement date created range filter for UsersController#index
 - [x] Implement profession filter for UsersController#index
 - [ ] decide on custom endpoint + implement
 - [x] write import script (or do this as the other endpoint?)
