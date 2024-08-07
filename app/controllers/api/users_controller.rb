@@ -1,7 +1,9 @@
 class Api::UsersController < ApplicationController
   include ApiFiltering
-  filter :profession, :optional, type: Array, operator: :in
-  filter :profession, :optional, type: String, operator: :eq
+  filter :profession, :optional, type: Array, operators: [:in]
+  filter :profession, :optional, type: String, operators: [:eq]
+  filter :date_created, :optional, type: Hash, operators: [:gte, :gt, :lt, :lte], aliases: :created_at
+  filter :date_created, :optional, type: String, operators: [:eq], aliases: :created_at
 
   def show
     @user ||= User.find(params[:id])
@@ -12,7 +14,11 @@ class Api::UsersController < ApplicationController
 
   def index
     @pagy, @users = pagy(users_requested)
-    render json: paged_json_with_meta(records: @users, paging: @pagy, filters: applied_filters)
+    render json: paged_json_with_meta(records: serialized_users, paging: @pagy, filters: applied_filters)
+  end
+
+  def serialized_users
+    ActiveModelSerializers::SerializableResource.new(@users.to_a)
   end
 
   def users_requested
