@@ -1,6 +1,4 @@
-class Api::UsersController < ApplicationController
-  include ApiFiltering
-  include ApiSorting
+class Api::UsersController < ApiController
   filter :profession, :optional, type: Array, operators: [:in]
   filter :profession, :optional, type: String, operators: [:eq]
   filter :date_created, :optional, type: Hash, operators: [:gte, :gt, :lt, :lte], aliases: :created_at
@@ -16,15 +14,11 @@ class Api::UsersController < ApplicationController
   end
 
   def index
-    @pagy, @users = paginate(users_requested)
-    render json: paged_json_with_meta(records: serialized_users, paging: @pagy, filters: applied_filters, sort: applied_sorts)
+    load_requested_records
+    render json: formatted_response_json
   end
 
-  def serialized_users
-    ActiveModelSerializers::SerializableResource.new(@users.to_a)
-  end
-
-  def users_requested
-    apply_sort(apply_filters(User.all))
+  def base_record_scope
+    User.all
   end
 end
