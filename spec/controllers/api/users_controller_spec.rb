@@ -47,7 +47,7 @@ RSpec.describe "Api::UsersController", type: :request do
         let!(:users) { create_list(:user, Api::PaginationHelper.limit + 1) }
 
         it "returns paginated results for first page" do
-          get "/api/users", headers: api_headers
+          get "/api/users", headers: api_headers, params: { }
 
           expect(response.status).to eq(200)
           expect(response_json[:data].size).to eq(Api::PaginationHelper.limit)
@@ -80,7 +80,7 @@ RSpec.describe "Api::UsersController", type: :request do
       it "returns paginated results even for a single page" do
         users = create_list(:user, Api::PaginationHelper.limit - 1)
 
-        get "/api/users", headers: api_headers
+        get "/api/users", headers: api_headers, params: { }
 
         expect(response.status).to eq(200)
         expect(response_json[:data].size).to eq(Api::PaginationHelper.limit - 1)
@@ -97,7 +97,7 @@ RSpec.describe "Api::UsersController", type: :request do
       it "returns empty results when there are no Users" do
         User.all.each { |user| user.destroy }
 
-        get "/api/users", headers: api_headers
+        get "/api/users", headers: api_headers, params: { page_limit: 2 }
 
         expect(response.status).to eq(200)
         expect(response_json[:data].size).to eq(0)
@@ -114,7 +114,7 @@ RSpec.describe "Api::UsersController", type: :request do
 
     context "with query filtering" do
       it "returns empty filtering metadata if no filters applied" do
-        get "/api/users", headers: api_headers, params: { }
+        get "/api/users", headers: api_headers, params: { page_limit: 2 }
         expect(response.status).to eq(200)
         expect(response_json[:metadata][:filters]).to eq({})
       end
@@ -126,7 +126,7 @@ RSpec.describe "Api::UsersController", type: :request do
         it "returns all Users with the matching profession" do
           writer_users = create_list(:user, Api::PaginationHelper.limit - 1, profession: "writer")
 
-          get "/api/users", headers: api_headers, params: { profession: ["writer"] }
+          get "/api/users", headers: api_headers, params: { profession: ["writer"], page_limit: 2 }
 
           expect(response.status).to eq(200)
           expect(response_json[:metadata][:paging][:count]).to eq(writer_users.size)
@@ -139,7 +139,7 @@ RSpec.describe "Api::UsersController", type: :request do
         it "accepts profession as a string instead of an array" do
           writer_users = create_list(:user, Api::PaginationHelper.limit - 1, profession: "writer")
 
-          get "/api/users", headers: api_headers, params: { profession: "writer" }
+          get "/api/users", headers: api_headers, params: { profession: "writer", page_limit: 2 }
 
           expect(response.status).to eq(200)
           expect(response_json[:metadata][:paging][:count]).to eq(writer_users.size)
@@ -152,7 +152,7 @@ RSpec.describe "Api::UsersController", type: :request do
         it "can filter by more than 1 profession at a time" do
           writer_users = create_list(:user, Api::PaginationHelper.limit - 1, profession: "writer")
 
-          get "/api/users", headers: api_headers, params: { profession: %w[writer programmer] }
+          get "/api/users", headers: api_headers, params: { profession: %w[writer programmer], page_limit: 2 }
 
           expect(response.status).to eq(200)
           expect(response_json[:metadata][:paging][:count]).to eq(writer_users.size + programmer_users.size)
@@ -160,7 +160,7 @@ RSpec.describe "Api::UsersController", type: :request do
         end
 
         it "is optional" do
-          get "/api/users", headers: api_headers, params: { }
+          get "/api/users", headers: api_headers, params: { page_limit: 2 }
 
           expect(response.status).to eq(200)
           expect(response_json[:metadata][:paging][:count]).to eq(User.count)
@@ -169,7 +169,7 @@ RSpec.describe "Api::UsersController", type: :request do
         it "ignores unknown professions" do
           writer_users = create_list(:user, Api::PaginationHelper.limit - 1, profession: "writer")
 
-          get "/api/users", headers: api_headers, params: { profession: %w[writer made_up_profession] }
+          get "/api/users", headers: api_headers, params: { profession: %w[writer made_up_profession], page_limit: 2 }
 
           expect(response.status).to eq(200)
           expect(response_json[:metadata][:paging][:count]).to eq(writer_users.size)
@@ -177,13 +177,13 @@ RSpec.describe "Api::UsersController", type: :request do
         end
 
         it "can return no results" do
-          get "/api/users", headers: api_headers, params: { profession: %w[made_up_profession] }
+          get "/api/users", headers: api_headers, params: { profession: %w[made_up_profession], page_limit: 2 }
           expect(response.status).to eq(200)
           expect(response_json[:metadata][:paging][:count]).to eq(0)
         end
 
         it "specifies the filter criteria in the response metadata" do
-          get "/api/users", headers: api_headers, params: { profession: %w[programmer] }
+          get "/api/users", headers: api_headers, params: { profession: %w[programmer], page_limit: 2 }
           expect(response.status).to eq(200)
           expect(response_json[:metadata][:paging][:count]).to eq(programmer_users.size)
           expect(response_json[:metadata][:filters]).to include({ profession: { value: %w[programmer], operator: "in"}})
@@ -198,7 +198,7 @@ RSpec.describe "Api::UsersController", type: :request do
         let!(:thursday_user) { create(:user, created_at: DateTime.new(2024,8,8)) }
 
         it "accepts a single date value and returns all users created on that exact date" do
-          get "/api/users", headers: api_headers, params: { date_created: "2024-08-07" }
+          get "/api/users", headers: api_headers, params: { date_created: "2024-08-07", page_limit: 2 }
 
           expect(response.status).to eq(200)
           expect(response_json[:metadata][:paging][:count]).to eq(2)
@@ -209,7 +209,7 @@ RSpec.describe "Api::UsersController", type: :request do
         end
 
         it "gte" do
-          get "/api/users", headers: api_headers, params: { "date_created[gte]" => "2024-08-07" }
+          get "/api/users", headers: api_headers, params: { "date_created[gte]" => "2024-08-07", page_limit: 2 }
 
           expect(response.status).to eq(200)
           expect(response_json[:metadata][:paging][:count]).to eq(3)
@@ -220,7 +220,7 @@ RSpec.describe "Api::UsersController", type: :request do
         end
 
         it "gt" do
-          get "/api/users", headers: api_headers, params: { "date_created[gt]" => "2024-08-07" }
+          get "/api/users", headers: api_headers, params: { "date_created[gt]" => "2024-08-07", page_limit: 2 }
 
           expect(response.status).to eq(200)
           expect(response_json[:metadata][:paging][:count]).to eq(1)
@@ -231,7 +231,7 @@ RSpec.describe "Api::UsersController", type: :request do
         end
 
         it "lte" do
-          get "/api/users", headers: api_headers, params: { "date_created[lte]" => "2024-08-07" }
+          get "/api/users", headers: api_headers, params: { "date_created[lte]" => "2024-08-07", page_limit: 2 }
 
           expect(response.status).to eq(200)
           expect(response_json[:metadata][:paging][:count]).to eq(4)
@@ -242,7 +242,7 @@ RSpec.describe "Api::UsersController", type: :request do
         end
 
         it "lt" do
-          get "/api/users", headers: api_headers, params: { "date_created[lt]" => "2024-08-07" }
+          get "/api/users", headers: api_headers, params: { "date_created[lt]" => "2024-08-07", page_limit: 2 }
 
           expect(response.status).to eq(200)
           expect(response_json[:metadata][:paging][:count]).to eq(2)
@@ -256,6 +256,7 @@ RSpec.describe "Api::UsersController", type: :request do
           get "/api/users", headers: api_headers, params: {
             "date_created[gt]" => "2024-08-05",
             "date_created[lt]" => "2024-08-08",
+            page_limit: 2
           }
 
           expect(response.status).to eq(200)
@@ -276,31 +277,33 @@ RSpec.describe "Api::UsersController", type: :request do
       let!(:second_user) { create(:user, created_at: DateTime.new(2024,8,6)) }
 
       it "defaults to asc order sort" do
-        get "/api/users", headers: api_headers, params: { }
+        get "/api/users", headers: api_headers, params: { page_limit: 2 }
 
         expect(response.status).to eq(200)
         expect(response_json[:metadata][:paging][:count]).to eq(2)
         expect(response_json[:metadata][:filters]).to eq({})
+        expect(response_json[:metadata][:sort]).to eq({ date_created: "asc" })
         expect(response_json[:data].first[:id]).to eq(first_user.id)
         expect(response_json[:data].last[:id]).to eq(second_user.id)
       end
 
       it "takes sort_order param :asc" do
-        get "/api/users", headers: api_headers, params: { sort_order: "asc" }
+        get "/api/users", headers: api_headers, params: { sort_order: "asc", page_limit: 2 }
 
         expect(response.status).to eq(200)
         expect(response_json[:metadata][:paging][:count]).to eq(2)
         expect(response_json[:metadata][:filters]).to eq({})
+        expect(response_json[:metadata][:sort]).to eq({ date_created: "asc" })
         expect(response_json[:data].first[:id]).to eq(first_user.id)
         expect(response_json[:data].last[:id]).to eq(second_user.id)
       end
 
       it "takes sort_order param :desc" do
-        get "/api/users", headers: api_headers, params: { sort_order: "desc" }
+        get "/api/users", headers: api_headers, params: { sort_order: "desc", page_limit: 2 }
 
         expect(response.status).to eq(200)
         expect(response_json[:metadata][:paging][:count]).to eq(2)
-        expect(response_json[:metadata][:filters]).to eq({})
+        expect(response_json[:metadata][:sort]).to eq({ date_created: "desc" })
         expect(response_json[:data].first[:id]).to eq(second_user.id)
         expect(response_json[:data].last[:id]).to eq(first_user.id)
       end
