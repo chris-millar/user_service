@@ -214,7 +214,7 @@ RSpec.describe "Api::UsersController", type: :request do
           expect(response.status).to eq(200)
           expect(response_json[:metadata][:paging][:count]).to eq(3)
           expect(response_json[:metadata][:filters]).to include(
-            date_created: { value: "2024-08-07", operator: "gte" }
+            "date_created[gte]": { value: "2024-08-07", operator: "gte" }
           )
           expect(response_json[:data].all? { |user| user[:date_created] >= "2024-08-07" }).to be(true)
         end
@@ -225,7 +225,7 @@ RSpec.describe "Api::UsersController", type: :request do
           expect(response.status).to eq(200)
           expect(response_json[:metadata][:paging][:count]).to eq(1)
           expect(response_json[:metadata][:filters]).to include(
-            date_created: { value: "2024-08-07", operator: "gt" }
+            "date_created[gt]": { value: "2024-08-07", operator: "gt" }
           )
           expect(response_json[:data].all? { |user| user[:date_created] > "2024-08-07" }).to be(true)
         end
@@ -236,7 +236,7 @@ RSpec.describe "Api::UsersController", type: :request do
           expect(response.status).to eq(200)
           expect(response_json[:metadata][:paging][:count]).to eq(4)
           expect(response_json[:metadata][:filters]).to include(
-            date_created: { value: "2024-08-07", operator: "lte" }
+            "date_created[lte]": { value: "2024-08-07", operator: "lte" }
           )
           expect(response_json[:data].all? { |user| user[:date_created] <= "2024-08-07" }).to be(true)
         end
@@ -247,9 +247,26 @@ RSpec.describe "Api::UsersController", type: :request do
           expect(response.status).to eq(200)
           expect(response_json[:metadata][:paging][:count]).to eq(2)
           expect(response_json[:metadata][:filters]).to include(
-            date_created: { value: "2024-08-07", operator: "lt" }
+            "date_created[lt]": { value: "2024-08-07", operator: "lt" }
           )
           expect(response_json[:data].all? { |user| user[:date_created] < "2024-08-07" }).to be(true)
+        end
+
+        it "supports multiple operators being applied at once" do
+          get "/api/users", headers: api_headers, params: {
+            "date_created[gt]" => "2024-08-05",
+            "date_created[lt]" => "2024-08-08",
+          }
+
+          expect(response.status).to eq(200)
+          expect(response_json[:metadata][:paging][:count]).to eq(3)
+          expect(response_json[:metadata][:filters]).to include(
+            "date_created[gt]": { value: "2024-08-05", operator: "gt" },
+            "date_created[lt]": { value: "2024-08-08", operator: "lt" }
+          )
+          expect(response_json[:data].all? do |user|
+            "2024-08-05" < user[:date_created] && user[:date_created] < "2024-08-08"
+          end).to be(true)
         end
       end
     end

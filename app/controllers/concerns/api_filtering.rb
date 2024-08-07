@@ -24,8 +24,13 @@ module ApiFiltering
             return ["#{model_field_name} < ?", value] if operator === :lt
             return ["#{model_field_name} <= ?", value] if operator === :lte
           end
+          filter_name = -> () do
+            return "#{configured_filter.name}[#{configured_filter.operator}]" if configured_filter.type == Hash
+            configured_filter.name
+          end
+
           filtered_scope = filtered_scope.where(condition.call(configured_filter.operator))
-          applied_filters[configured_filter.name] = { value: value, operator: configured_filter.operator }
+          applied_filters[filter_name.call] = { value: value, operator: configured_filter.operator }
         end
       end
 
