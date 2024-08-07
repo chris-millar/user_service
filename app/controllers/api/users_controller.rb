@@ -1,7 +1,7 @@
 class Api::UsersController < ApplicationController
   include ApiFiltering
-  filter :profession, :optional, type: Array, operator: :in
-  filter :profession, :optional, type: String, operator: :eq
+  filter :profession, :optional, type: Array, operators: [:in]
+  filter :profession, :optional, type: String, operators: [:eq]
 
   def show
     @user ||= User.find(params[:id])

@@ -29,19 +29,25 @@ module ApiFiltering
   class_methods do
     @@_configured_filters = []
 
-    def filter(param_name, option, type:, operator:)
-      fetch_param = -> (params) do
-        field = type == Array ? [param_name => []] : [param_name]
-        params.permit(field)[param_name]
-      end
+    def filter(param_name, option, type:, operators:)
+      operators.each do |operator|
+        field = -> (type) do
+          return [param_name => []] if type == Array
+          [param_name]
+        end
 
-      @@_configured_filters << OpenStruct.new(
-        name: param_name,
-        value: fetch_param,
-        operator: operator,
-        optional: option === :optional,
-        type: type,
-      )
+        fetch_param = -> (params) do
+          params.permit(field.call(type))[param_name]
+        end
+
+        @@_configured_filters << OpenStruct.new(
+          name: param_name,
+          value: fetch_param,
+          operator: operator,
+          optional: option === :optional,
+          type: type,
+        )
+      end
     end
   end
 end
