@@ -51,3 +51,5 @@ Todo:
 - [ ] UX: create profession filter
 - [ ] UX: for custom endpoint(s)
 - [ ] reproducible deployment
+- [ ] document API
+- [ ] document learnings/feedback
