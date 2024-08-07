@@ -270,5 +270,40 @@ RSpec.describe "Api::UsersController", type: :request do
         end
       end
     end
+
+    context "with sorting" do
+      let!(:first_user) { create(:user, created_at: DateTime.new(2024,8,5)) }
+      let!(:second_user) { create(:user, created_at: DateTime.new(2024,8,6)) }
+
+      it "defaults to asc order sort" do
+        get "/api/users", headers: api_headers, params: { }
+
+        expect(response.status).to eq(200)
+        expect(response_json[:metadata][:paging][:count]).to eq(2)
+        expect(response_json[:metadata][:filters]).to eq({})
+        expect(response_json[:data].first[:id]).to eq(first_user.id)
+        expect(response_json[:data].last[:id]).to eq(second_user.id)
+      end
+
+      it "takes sort_order param :asc" do
+        get "/api/users", headers: api_headers, params: { sort_order: "asc" }
+
+        expect(response.status).to eq(200)
+        expect(response_json[:metadata][:paging][:count]).to eq(2)
+        expect(response_json[:metadata][:filters]).to eq({})
+        expect(response_json[:data].first[:id]).to eq(first_user.id)
+        expect(response_json[:data].last[:id]).to eq(second_user.id)
+      end
+
+      it "takes sort_order param :desc" do
+        get "/api/users", headers: api_headers, params: { sort_order: "desc" }
+
+        expect(response.status).to eq(200)
+        expect(response_json[:metadata][:paging][:count]).to eq(2)
+        expect(response_json[:metadata][:filters]).to eq({})
+        expect(response_json[:data].first[:id]).to eq(second_user.id)
+        expect(response_json[:data].last[:id]).to eq(first_user.id)
+      end
+    end
   end
 end

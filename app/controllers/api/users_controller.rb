@@ -22,6 +22,10 @@ class Api::UsersController < ApplicationController
   end
 
   def users_requested
-    apply_filters(User.all)
+    apply_filters(User.all).order(created_at: sort_order)
+  end
+
+  def sort_order
+    @sort_order ||= params.permit(:sort_order)[:sort_order] || :asc
   end
 end
