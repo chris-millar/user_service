@@ -9,7 +9,7 @@ RSpec.describe "Api::UsersController", type: :request do
         get "/api/users/#{existing_user.id}", headers: api_headers
 
         expect(response.status).to eq(200)
-        expect(response_json[:user]).to include(
+        expect(response_json).to include(
           first_name: existing_user.first_name,
           last_name: existing_user.last_name,
           email: existing_user.email,
@@ -22,7 +22,7 @@ RSpec.describe "Api::UsersController", type: :request do
       it "aliases timestamps as date_created and date_updated and formats them as iso8601" do
         get "/api/users/#{existing_user.id}", headers: api_headers
 
-        expect(response_json[:user]).to include(
+        expect(response_json).to include(
           date_created: existing_user.created_at.iso8601,
           date_updated: existing_user.updated_at.iso8601
         )
@@ -205,7 +205,7 @@ RSpec.describe "Api::UsersController", type: :request do
           expect(response_json[:metadata][:filters]).to include(
             date_created: { value: "2024-08-07", operator: "eq" }
           )
-          expect(response_json[:data].all? { |user| user[:created_at].to_date === "2024-08-07".to_date }).to be(true)
+          expect(response_json[:data].all? { |user| user[:date_created].to_date === "2024-08-07".to_date }).to be(true)
         end
 
         it "gte" do
@@ -216,7 +216,40 @@ RSpec.describe "Api::UsersController", type: :request do
           expect(response_json[:metadata][:filters]).to include(
             date_created: { value: "2024-08-07", operator: "gte" }
           )
-          expect(response_json[:data].all? { |user| user[:created_at] >= "2024-08-07" }).to be(true)
+          expect(response_json[:data].all? { |user| user[:date_created] >= "2024-08-07" }).to be(true)
+        end
+
+        it "gt" do
+          get "/api/users", headers: api_headers, params: { "date_created[gt]" => "2024-08-07" }
+
+          expect(response.status).to eq(200)
+          expect(response_json[:metadata][:paging][:count]).to eq(1)
+          expect(response_json[:metadata][:filters]).to include(
+            date_created: { value: "2024-08-07", operator: "gt" }
+          )
+          expect(response_json[:data].all? { |user| user[:date_created] > "2024-08-07" }).to be(true)
+        end
+
+        it "lte" do
+          get "/api/users", headers: api_headers, params: { "date_created[lte]" => "2024-08-07" }
+
+          expect(response.status).to eq(200)
+          expect(response_json[:metadata][:paging][:count]).to eq(4)
+          expect(response_json[:metadata][:filters]).to include(
+            date_created: { value: "2024-08-07", operator: "lte" }
+          )
+          expect(response_json[:data].all? { |user| user[:date_created] <= "2024-08-07" }).to be(true)
+        end
+
+        it "lt" do
+          get "/api/users", headers: api_headers, params: { "date_created[lt]" => "2024-08-07" }
+
+          expect(response.status).to eq(200)
+          expect(response_json[:metadata][:paging][:count]).to eq(2)
+          expect(response_json[:metadata][:filters]).to include(
+            date_created: { value: "2024-08-07", operator: "lt" }
+          )
+          expect(response_json[:data].all? { |user| user[:date_created] < "2024-08-07" }).to be(true)
         end
       end
     end

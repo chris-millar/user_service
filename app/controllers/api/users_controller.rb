@@ -14,7 +14,11 @@ class Api::UsersController < ApplicationController
 
   def index
     @pagy, @users = pagy(users_requested)
-    render json: paged_json_with_meta(records: @users, paging: @pagy, filters: applied_filters)
+    render json: paged_json_with_meta(records: serialized_users, paging: @pagy, filters: applied_filters)
+  end
+
+  def serialized_users
+    ActiveModelSerializers::SerializableResource.new(@users.to_a)
   end
 
   def users_requested
