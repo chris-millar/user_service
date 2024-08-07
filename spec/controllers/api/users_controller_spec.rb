@@ -189,6 +189,36 @@ RSpec.describe "Api::UsersController", type: :request do
           expect(response_json[:metadata][:filters]).to include({ profession: { value: %w[programmer], operator: "in"}})
         end
       end
+
+      context "on date_created" do
+        let!(:monday_user) { create(:user, created_at: DateTime.new(2024,8,5)) }
+        let!(:tuesday_user) { create(:user, created_at: DateTime.new(2024,8,6)) }
+        let!(:wednesday_user_one) { create(:user, created_at: DateTime.new(2024,8,7)) }
+        let!(:wednesday_user_two) { create(:user, created_at: DateTime.new(2024,8,7)) }
+        let!(:thursday_user) { create(:user, created_at: DateTime.new(2024,8,8)) }
+
+        it "accepts a single date value and returns all users created on that exact date" do
+          get "/api/users", headers: api_headers, params: { date_created: "2024-08-07" }
+
+          expect(response.status).to eq(200)
+          expect(response_json[:metadata][:paging][:count]).to eq(2)
+          expect(response_json[:metadata][:filters]).to include(
+            date_created: { value: "2024-08-07", operator: "eq" }
+          )
+          expect(response_json[:data].all? { |user| user[:created_at].to_date === "2024-08-07".to_date }).to be(true)
+        end
+
+        it "gte" do
+          get "/api/users", headers: api_headers, params: { "date_created[gte]" => "2024-08-07" }
+
+          expect(response.status).to eq(200)
+          expect(response_json[:metadata][:paging][:count]).to eq(3)
+          expect(response_json[:metadata][:filters]).to include(
+            date_created: { value: "2024-08-07", operator: "gte" }
+          )
+          expect(response_json[:data].all? { |user| user[:created_at] >= "2024-08-07" }).to be(true)
+        end
+      end
     end
   end
 end

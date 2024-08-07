@@ -2,6 +2,8 @@ class Api::UsersController < ApplicationController
   include ApiFiltering
   filter :profession, :optional, type: Array, operators: [:in]
   filter :profession, :optional, type: String, operators: [:eq]
+  filter :date_created, :optional, type: Hash, operators: [:gte, :gt, :lt, :lte], aliases: :created_at
+  filter :date_created, :optional, type: String, operators: [:eq], aliases: :created_at
 
   def show
     @user ||= User.find(params[:id])
