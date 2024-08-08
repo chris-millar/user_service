@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   namespace :app do
     root to: "root#index"
+    get "*path", to: "root#index"
   end
 
   namespace :api do

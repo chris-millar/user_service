@@ -1,5 +1,11 @@
-import React from "react";
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { RoutesConfig } from './RoutesConfig';
 
 export const App = () => {
-  return <h1>Hello, App from React!</h1>;
-};
+  return (
+    <Router basename="/app">
+      <RoutesConfig/>
+    </Router>
+  );
+}
