@@ -17,6 +17,8 @@ multiple versions of a given tool (coding language in our case) to be used on a 
 # install dependencies
 bundle install
 
+npm install
+
 # create the database
 rails db:create
 rails db:migrate
@@ -29,8 +31,11 @@ rspec
 
 # Run local
 ```
-# run the server
+# run the api/web host server
 ./bin/dev
+
+# run the vite dev server
+bin/vite dev
 ```
 
 
