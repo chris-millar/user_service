@@ -1,8 +1,8 @@
 import React from 'react';
-import dayjs from 'dayjs';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { DateField } from '@mui/x-date-pickers/DateField';
+import { DateTime } from "luxon";
 
 const Field = ({label, value}) => {
   return (
@@ -32,7 +32,7 @@ export const User = () => {
         <Field label={"Profession"} value={user.profession}/>
         <Field label={"City"} value={user.city}/>
         <Field label={"Country"} value={user.country}/>
-        <DateField disabled label={"Date Created"} defaultValue={dayjs(user.dateCreated)} />
+        <DateField disabled label={"Date Created"} defaultValue={DateTime.fromISO(user.dateCreated)} />
       </Stack>
     </>
   );
