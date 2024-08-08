@@ -1,9 +1,12 @@
 import React from 'react';
+import { DateTime } from 'luxon';
+import { useParams } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { DateField } from '@mui/x-date-pickers/DateField';
-import { DateTime } from "luxon";
-import { useParams } from 'react-router-dom';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+import Alert from '@mui/material/Alert';
 import { useUserQuery } from '../../services/userServices';
 
 const Field = ({label, value}) => {
@@ -16,8 +19,12 @@ export const User = () => {
   const { id } = useParams();
   const { data: user, isLoading, error } = useUserQuery(id);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: { error.message }</div>;
+  if (isLoading) return (
+    <Box sx={{ width: '100%' }}>
+      Loading: <CircularProgress />
+    </Box>
+  )
+  if (error) return (<Alert severity="error">{ error.message }</Alert>)
 
   return (
     <>
