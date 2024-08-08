@@ -6,7 +6,7 @@ ruby "3.3.1"
 gem "rails", "~> 7.1.3", ">= 7.1.3.4"
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
-gem "sprockets-rails"
+# gem "sprockets-rails"
 
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
@@ -15,7 +15,7 @@ gem "pg", "~> 1.1"
 gem "puma", ">= 5.0"
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem "jbuilder"
+# gem "jbuilder"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
@@ -23,12 +23,14 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
-gem "react_on_rails", "~> 14.0"
-gem "shakapacker", "~> 8.0"
+# gem "react_on_rails", "~> 14.0"
+# gem "shakapacker", "~> 8.0"
 gem "active_model_serializers", "~> 0.10.14"
 gem "pagy"
 gem "faker"
 gem "csv"
+gem "vite_rails", "~> 3.0"
+gem "vite_plugin_legacy", "~> 3.0"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -48,3 +50,4 @@ group :test do
   gem "rspec-rails"
   gem "factory_bot_rails"
 end
+
