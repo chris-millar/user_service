@@ -6,11 +6,12 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag "application" %>
-    <%= javascript_pack_tag "application" %>
+    <%= vite_client_tag %>
+    <%= vite_javascript_tag 'application.jsx' %>
   </head>
 
   <body>
     <%= yield %>
+    <div id="root"></div>
   </body>
 </html>

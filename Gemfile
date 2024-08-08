@@ -29,6 +29,8 @@ gem "active_model_serializers", "~> 0.10.14"
 gem "pagy"
 gem "faker"
 gem "csv"
+gem "vite_rails", "~> 3.0"
+gem "vite_plugin_legacy", "~> 3.0"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -48,3 +50,4 @@ group :test do
   gem "rspec-rails"
   gem "factory_bot_rails"
 end
+

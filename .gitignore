@@ -45,3 +45,11 @@ yarn-debug.log*
 
 # place to have temporary scaps of code or notes while I am working
 junk.md
+
+# Vite Ruby
+/public/vite*
+node_modules
+# Vite uses dotenv and suggests to ignore local-only env files. See
+# https://vitejs.dev/guide/env-and-mode.html#env-files
+*.local
+

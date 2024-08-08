@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
   namespace :app do
-    root to: "hello_world#index"
-    get 'hello_world', to: "hello_world#index"
+    root to: "root#index"
   end
 
   namespace :api do
