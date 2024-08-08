@@ -1,6 +1,8 @@
 import React from 'react';
+import dayjs from 'dayjs';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
+import { DateField } from '@mui/x-date-pickers/DateField';
 
 const Field = ({label, value}) => {
   return (
@@ -30,7 +32,7 @@ export const User = () => {
         <Field label={"Profession"} value={user.profession}/>
         <Field label={"City"} value={user.city}/>
         <Field label={"Country"} value={user.country}/>
-        <div>{user.dateCreated}</div>
+        <DateField disabled label={"Date Created"} defaultValue={dayjs(user.dateCreated)} />
       </Stack>
     </>
   );
