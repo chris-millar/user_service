@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { PageLayout } from './PageLayout';
 import { Home } from './pages/Home';
-import { UserList } from './pages/UserList';
+import { UserList } from './pages/users/UserList';
 import { User } from './pages/User';
 import { NotFound } from './pages/NotFound';
 
