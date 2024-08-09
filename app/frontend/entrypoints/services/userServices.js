@@ -29,12 +29,11 @@ const fetchUsers = async (page, pageSize) => {
   };
 };
 
-// export const useUsersQuery = (page, pageSize) => {
 export const useUsersQuery = ({ page, pageSize }) => {
   const actualPage = page + 1
   return useQuery({
     queryKey: ['users', actualPage, pageSize],
     queryFn: () => fetchUsers(actualPage, pageSize),
-    keepPreviousData: true, // Keep the previous data while fetching new data
+    keepPreviousData: true,
   });
 };

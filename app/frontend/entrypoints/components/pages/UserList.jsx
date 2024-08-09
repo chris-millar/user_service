@@ -1,10 +1,16 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, {useState, useMemo, useRef, useCallback} from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { DateTime } from 'luxon';
+import { Link } from 'react-router-dom';
 import { useUsersQuery } from '../../services/userServices';
 
+const renderIdAsLink = ({ value }) => {
+  const path = `/users/${value}`
+  return (<Link id={path} to={path}>{value}</Link>)
+}
+
 const columns = [
-  { field: 'id', headerName: 'ID', type: 'number', width: 75 },
+  { field: 'id', headerName: 'ID', type: 'number', width: 75, renderCell: renderIdAsLink },
   { field: 'first_name', headerName: 'First name', type: 'string', width: 100 },
   { field: 'last_name', headerName: 'Last name', type: 'string', width: 100 },
   { field: 'email', headerName: 'Email', type: 'string', width: 300 },
@@ -46,6 +52,12 @@ export const UserList = () => {
           columns={columns}
           rowCount={rowCount}
           loading={isLoading}
+          slotProps={{
+            loadingOverlay: {
+              variant: 'linear-progress',
+              noRowsVariant: 'linear-progress',
+            },
+          }}
           pageSizeOptions={[25]}
           paginationModel={paginationModel}
           paginationMode="server"
