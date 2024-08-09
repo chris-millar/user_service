@@ -28,7 +28,6 @@ export const User = () => {
 
   return (
     <>
-      <div>User</div>
       <br/>
       <Stack spacing={2}>
         <Field label={"First Name"} value={user.first_name}/>

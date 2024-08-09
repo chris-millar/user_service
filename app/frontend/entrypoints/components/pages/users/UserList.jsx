@@ -4,6 +4,7 @@ import {useUsersQuery} from '../../../services/userServices';
 import {columns} from './gridConfig';
 import TextField from '@mui/material/TextField';
 import { DateField } from '@mui/x-date-pickers/DateField';
+import Grid from '@mui/material/Grid';
 
 const PAGE_SIZE = 50;
 
@@ -38,40 +39,48 @@ export const UserList = () => {
 
   return (
     <>
-      <div>UserList</div>
       <br/>
-      <TextField
-        id="profession-filter"
-        label="Profession Filter"
-        variant="outlined"
-        margin="normal"
-        size="small"
-        onChange={(e) => {
-          setProfessionFilter(e.target.value)
-        }
-      }/>
-      <DateField
-        label="After Date"
-        variant="outlined"
-        size="small"
-        margin="normal"
-        clearable
-        onChange={(value, _) => {
-          setMinDateFilter(value)
-        }}
-        maxDate={maxDateFilter?.minus({ days: 1 })}
-      />
-      <DateField
-        label="Before Date"
-        variant="outlined"
-        size="small"
-        margin="normal"
-        clearable
-        onChange={(value, _) => {
-          setMaxDateFilter(value)
-        }}
-        minDate={minDateFilter?.plus({ days: 1 })}
-      />
+      Custom Filters
+      <Grid container spacing={2}>
+        <Grid item xs={3}>
+          <TextField
+            id="profession-filter"
+            label="Profession Filter"
+            variant="outlined"
+            margin="normal"
+            size="small"
+            onChange={(e) => {
+              setProfessionFilter(e.target.value)
+            }
+            }/>
+        </Grid>
+        <Grid item xs={2}>
+          <DateField
+            label="After Date"
+            variant="outlined"
+            size="small"
+            margin="normal"
+            clearable
+            onChange={(value, _) => {
+              setMinDateFilter(value)
+            }}
+            maxDate={maxDateFilter?.minus({ days: 1 })}
+          />
+        </Grid>
+        <Grid item xs={2}>
+          <DateField
+            label="Before Date"
+            variant="outlined"
+            size="small"
+            margin="normal"
+            clearable
+            onChange={(value, _) => {
+              setMaxDateFilter(value)
+            }}
+            minDate={minDateFilter?.plus({ days: 1 })}
+          />
+        </Grid>
+      </Grid>
       <div style={{height: 450, width: '100%'}}>
         <DataGrid
           rows={data?.users || []}
