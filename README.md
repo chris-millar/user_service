@@ -50,8 +50,8 @@ Todo:
 - [x] Implement profession filter for UsersController#index
 - [ ] decide on custom endpoint + implement
 - [x] write import script (or do this as the other endpoint?)
-- [ ] UX: create User component
-- [ ] UX: create list view of Users
+- [x] UX: create User component
+- [x] UX: create list view of Users
 - [ ] UX: create filter for date range
 - [ ] UX: create profession filter
 - [ ] UX: for custom endpoint(s)
