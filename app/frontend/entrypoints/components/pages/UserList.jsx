@@ -4,6 +4,8 @@ import { DateTime } from 'luxon';
 import { Link } from 'react-router-dom';
 import { useUsersQuery } from '../../services/userServices';
 
+const PAGE_SIZE = 50;
+
 const renderIdAsLink = ({ value }) => {
   const path = `/users/${value}`
   return (<Link id={path} to={path}>{value}</Link>)
@@ -30,7 +32,7 @@ const columns = [
 export const UserList = () => {
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
-    pageSize: 25,
+    pageSize: PAGE_SIZE,
   });
 
   const { isLoading, data } = useUsersQuery(paginationModel);
@@ -46,7 +48,7 @@ export const UserList = () => {
     <>
       <div>UserList</div>
       <br/>
-      <div style={{height: 400, width: '100%'}}>
+      <div style={{height: 500, width: '100%'}}>
         <DataGrid
           rows={data?.users || []}
           columns={columns}
@@ -58,10 +60,11 @@ export const UserList = () => {
               noRowsVariant: 'linear-progress',
             },
           }}
-          pageSizeOptions={[25]}
+          pageSizeOptions={[PAGE_SIZE]}
           paginationModel={paginationModel}
           paginationMode="server"
           onPaginationModelChange={setPaginationModel}
+          disableRowSelectionOnClick
         />
       </div>
     </>
