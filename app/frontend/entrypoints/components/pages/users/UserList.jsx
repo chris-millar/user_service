@@ -3,18 +3,30 @@ import {DataGrid} from '@mui/x-data-grid';
 import {useUsersQuery} from '../../../services/userServices';
 import {columns} from './gridConfig';
 import TextField from '@mui/material/TextField';
+import { DateField } from '@mui/x-date-pickers/DateField';
 
 const PAGE_SIZE = 50;
 
 export const UserList = () => {
   const [professionFilter, setProfessionFilter] = useState(null);
+  const [minDateFilter, setMinDateFilter] = useState(null);
+  const [maxDateFilter, setMaxDateFilter] = useState(null);
 
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: PAGE_SIZE,
   });
 
-  const { isLoading, data } = useUsersQuery({ ...paginationModel, filters: { professionFilter } });
+  const { isLoading, data } = useUsersQuery(
+    {
+      ...paginationModel,
+      filters: {
+        professionFilter,
+        minDateFilter,
+        maxDateFilter
+      }
+    }
+  );
   const rowCountRef = useRef(data?.pageInfo.totalUsers || 0);
   const rowCount = useMemo(() => {
     if (data?.pageInfo.totalUsers !== undefined) {
@@ -31,11 +43,35 @@ export const UserList = () => {
       <TextField
         id="profession-filter"
         label="Profession Filter"
-        variant="standard"
+        variant="outlined"
+        margin="normal"
+        size="small"
         onChange={(e) => {
           setProfessionFilter(e.target.value)
         }
       }/>
+      <DateField
+        label="After Date"
+        variant="outlined"
+        size="small"
+        margin="normal"
+        clearable
+        onChange={(value, _) => {
+          setMinDateFilter(value)
+        }}
+        maxDate={maxDateFilter?.minus({ days: 1 })}
+      />
+      <DateField
+        label="Before Date"
+        variant="outlined"
+        size="small"
+        margin="normal"
+        clearable
+        onChange={(value, _) => {
+          setMaxDateFilter(value)
+        }}
+        minDate={minDateFilter?.plus({ days: 1 })}
+      />
       <div style={{height: 450, width: '100%'}}>
         <DataGrid
           rows={data?.users || []}

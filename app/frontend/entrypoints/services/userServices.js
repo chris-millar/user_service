@@ -14,7 +14,9 @@ const fetchUsers = async (page, pageSize, filters) => {
   const params = {
     page: page,
     page_limit: pageSize,
-    ...(filters["professionFilter"] && { profession: filters["professionFilter"] })
+    ...(filters["professionFilter"] && { profession: filters["professionFilter"] }),
+    ...(filters["minDateFilter"] && { "date_created[gte]": filters["minDateFilter"].toISODate() }),
+    ...(filters["maxDateFilter"] && { "date_created[lte]": filters["maxDateFilter"].toISODate() }),
   };
   const response = await axios.get('/api/users', { params: params });
 
