@@ -42,7 +42,7 @@ export const UserList = () => {
       <br/>
       Custom Filters
       <Grid container spacing={2}>
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <TextField
             id="profession-filter"
             label="Profession Filter"
@@ -54,7 +54,7 @@ export const UserList = () => {
             }
             }/>
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={3}>
           <DateField
             label="After Date"
             variant="outlined"
@@ -67,7 +67,7 @@ export const UserList = () => {
             maxDate={maxDateFilter?.minus({ days: 1 })}
           />
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={3}>
           <DateField
             label="Before Date"
             variant="outlined"
