@@ -10,13 +10,13 @@ export const useUserQuery = (id) => {
   return useQuery({ queryFn: () => fetchUser(id) });
 };
 
-const fetchUsers = async (page, pageSize) => {
-  const response = await axios.get('/api/users', {
-    params: {
-      page: page,
-      page_limit: pageSize,
-    },
-  });
+const fetchUsers = async (page, pageSize, filters) => {
+  const params = {
+    page: page,
+    page_limit: pageSize,
+    ...(filters["professionFilter"] && { profession: filters["professionFilter"] })
+  };
+  const response = await axios.get('/api/users', { params: params });
 
   const users = response.data.data;
   const paging = response.data.metadata.paging;
@@ -29,11 +29,11 @@ const fetchUsers = async (page, pageSize) => {
   };
 };
 
-export const useUsersQuery = ({ page, pageSize }) => {
+export const useUsersQuery = ({ page, pageSize, filters }) => {
   const actualPage = page + 1
   return useQuery({
-    queryKey: ['users', actualPage, pageSize],
-    queryFn: () => fetchUsers(actualPage, pageSize),
+    queryKey: ['users', actualPage, pageSize, filters],
+    queryFn: () => fetchUsers(actualPage, pageSize, filters),
     keepPreviousData: true,
   });
 };
