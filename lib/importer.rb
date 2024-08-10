@@ -3,7 +3,6 @@ class Importer
     raw_users = CSV.open(csv_file, headers: true, return_headers: false).map(&:fields)
 
     raw_users.map do |raw_user|
-      raw_hash(raw_user)
       User.create(**raw_hash(raw_user))
     end
   end
