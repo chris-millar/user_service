@@ -17,11 +17,7 @@ module ApiSorting
 
       configured_filter = @@_configured_sort
 
-      sort_param = -> (params) do
-        params.permit(:sort_order)[:sort_order] || configured_filter.default
-      end
-      
-      value = sort_param.call(params)
+      value = params.permit(:sort_order)[:sort_order] || configured_filter.default
       model_field_name = configured_filter.aliases || configured_filter.name
 
       sorted_scope = sorted_scope.order(model_field_name => value)
