@@ -54,7 +54,13 @@ export const PageLayout = () => {
           ))}
         </List>
       </Drawer>
-      <main style={{ flexGrow: 1, padding: 16 }}>
+      <main style={{
+        flexGrow: 1,
+        padding: 16,
+        overflowX: 'hidden',
+        width: '100%',
+        boxSizing: 'border-box',
+      }}>
         <Outlet />
       </main>
     </div>

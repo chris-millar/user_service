@@ -92,6 +92,7 @@ export const UserList = () => {
             variant="outlined"
             margin="normal"
             size="small"
+            style={{width: "100px"}}
             defaultValue={initialImportId}
             onChange={(e) => {
               setImportIdFilter(e.target.value)
