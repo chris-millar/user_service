@@ -7,6 +7,11 @@ const renderIdAsLink = ({ value }) => {
   return (<Link id={path} to={path}>{value}</Link>)
 }
 
+const renderImportIdAsLink = ({ value }) => {
+  const path = `/imports/${value}`
+  return (<Link id={path} to={path}>{value}</Link>)
+}
+
 export const columns = [
   { field: 'id', headerName: 'ID', type: 'number', width: 75, renderCell: renderIdAsLink },
   { field: 'first_name', headerName: 'First name', type: 'string', width: 100 },
@@ -23,5 +28,5 @@ export const columns = [
     valueFormatter: (isoString) => DateTime.fromISO(isoString).toLocaleString(DateTime.DATE_SHORT),
     sortComparator: (dateTime1, dateTime2) => dateTime1.toMillis() - dateTime2.toMillis(),
   },
-  { field: 'import_id', headerName: 'Import ID', type: 'number', width: 75 }
+  { field: 'import_id', headerName: 'Import ID', type: 'number', width: 75, renderCell: renderImportIdAsLink }
 ];
