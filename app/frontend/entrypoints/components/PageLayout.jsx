@@ -1,6 +1,6 @@
 import React from 'react';
 import { Drawer, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
-import { Home, Person, ImportContacts } from '@mui/icons-material';
+import { Home, Person, UploadFile } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { Outlet } from 'react-router';
 import { useLocation } from 'react-router-dom';
@@ -11,7 +11,7 @@ const drawerWidth = 150;
 const menuItems = [
   { text: 'Home', icon: <Home />, path: '/' },
   { text: 'Users', icon: <Person />, path: '/users' },
-  { text: 'Imports', icon: <ImportContacts />, path: '/imports' },
+  { text: 'Imports', icon: <UploadFile />, path: '/imports' },
 ];
 
 const onMenuItem = (location, item) => {
