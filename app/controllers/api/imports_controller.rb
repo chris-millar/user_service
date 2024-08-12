@@ -25,6 +25,13 @@ class Api::ImportsController < ApiController
     render json: formatted_response_json
   end
 
+  def show
+    @import ||= Import.find(params[:id])
+    render json: @import
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: "No record found!" }, status: :not_found
+  end
+
   def base_record_scope
     Import.all
   end
