@@ -5,14 +5,17 @@ import {columns} from './gridConfig';
 import TextField from '@mui/material/TextField';
 import { DateField } from '@mui/x-date-pickers/DateField';
 import Grid from '@mui/material/Grid';
+import { useSearchParams } from 'react-router-dom';
 
 const PAGE_SIZE = 50;
 
 export const UserList = () => {
+  const [searchParams] = useSearchParams();
+  const initialImportId = searchParams.get('import_id')
   const [professionFilter, setProfessionFilter] = useState(null);
   const [minDateFilter, setMinDateFilter] = useState(null);
   const [maxDateFilter, setMaxDateFilter] = useState(null);
-  const [importIdFilter, setImportIdFilter] = useState(null);
+  const [importIdFilter, setImportIdFilter] = useState(initialImportId);
 
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
@@ -89,6 +92,7 @@ export const UserList = () => {
             variant="outlined"
             margin="normal"
             size="small"
+            defaultValue={initialImportId}
             onChange={(e) => {
               setImportIdFilter(e.target.value)
             }}

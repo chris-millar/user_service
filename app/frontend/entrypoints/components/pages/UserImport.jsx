@@ -6,6 +6,7 @@ import { Typography } from '@mui/material';
 import { useUserImportMutation } from '../../services/userServices';
 import Alert from '@mui/material/Alert';
 import CircularProgress from '@mui/material/CircularProgress';
+import { Link } from 'react-router-dom';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -57,7 +58,7 @@ export const UserImport = () => {
           { mutation.isSuccess && (
             <>
               <Alert severity="success">Import was successful!</Alert>
-              <p>View imported records</p>
+              <Link to={`/users?import_id=${mutation.data.id}`}>View Users from import</Link>
             </>
           )}
           { mutation.isError && <Alert severity="error">Error importing file: {mutation.error.message}</Alert> }
