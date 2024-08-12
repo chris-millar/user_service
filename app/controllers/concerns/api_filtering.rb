@@ -13,7 +13,7 @@ module ApiFiltering
     def apply_filters(base_scope)
       filtered_scope = base_scope
 
-      @@_configured_filters.each do |configured_filter|
+      self.class.configured_filters.each do |configured_filter|
         value = configured_filter.get_value.call(params)
         next unless value.present?
 
@@ -45,8 +45,6 @@ module ApiFiltering
   end
 
   class_methods do
-    @@_configured_filters = []
-
     def filter(param_name, option, type:, operators:, aliases: nil)
       operators.each do |operator|
         field = -> (type) do
@@ -59,8 +57,8 @@ module ApiFiltering
           return params.permit(field.call(type)).dig(param_name.to_s, operator.to_s) if type == Hash
           params.permit(field.call(type))[param_name]
         end
-
-        @@_configured_filters << OpenStruct.new(
+        @configured_filters ||= []
+        @configured_filters << OpenStruct.new(
           name: param_name,
           get_value: fetch_param,
           operator: operator,
@@ -69,6 +67,10 @@ module ApiFiltering
           aliases: aliases
         )
       end
+    end
+
+    def configured_filters
+      @configured_filters
     end
   end
 end
