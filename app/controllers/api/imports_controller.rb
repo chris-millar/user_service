@@ -1,4 +1,11 @@
 class Api::ImportsController < ApiController
+  filter :filename, :optional, type: String, operators: [:eq]
+  filter :performed_at, :optional, type: Hash, operators: [:gte, :gt, :lt, :lte]
+  filter :performed_at, :optional, type: String, operators: [:eq]
+  filter :status, :optional, type: String, operators: [:eq]
+
+  sort_via :id, default: :asc
+
   def create
     file = params.require(:file)
     return render json: { error: 'No file uploaded' }, status: :unprocessable_entity unless file.present?
@@ -11,5 +18,14 @@ class Api::ImportsController < ApiController
     else
       render json: import, status: :bad_request
     end
+  end
+
+  def index
+    load_requested_records
+    render json: formatted_response_json
+  end
+
+  def base_record_scope
+    Import.all
   end
 end

@@ -15,13 +15,13 @@ module ApiSorting
     def apply_sort(base_scope)
       sorted_scope = base_scope
 
-      configured_filter = @@_configured_sort
+      configured_sort = @@_configured_sort
 
-      value = params.permit(:sort_order)[:sort_order] || configured_filter.default
-      model_field_name = configured_filter.aliases || configured_filter.name
+      value = params.permit(:sort_order)[:sort_order] || configured_sort.default
+      model_field_name = configured_sort.aliases || configured_sort.field
 
       sorted_scope = sorted_scope.order(model_field_name => value)
-      applied_sorts[configured_filter.field] = value
+      applied_sorts[configured_sort.field] = value
 
       sorted_scope
     end

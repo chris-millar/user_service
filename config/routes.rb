@@ -6,7 +6,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     resources :users, only: [:index, :show]
-    resources :imports, only: [:create]
+    resources :imports, only: [:create, :index]
   end
 
   get "up" => "rails/health#show", as: :rails_health_check
