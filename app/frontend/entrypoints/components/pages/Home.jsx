@@ -37,6 +37,12 @@ export const Home = () => {
 
           </ul>
         </li>
+        <li>
+          Importing a csv of Users from your machine via
+          <Link to={`/imports`}>
+            Imports
+          </Link>
+        </li>
       </ul>
     </>
   );
