@@ -1,4 +1,12 @@
 class Importer
+  def self.import(csv_file)
+    raw_users = CSV.parse(csv_file, headers: true, return_headers: false).map(&:fields)
+
+    raw_users.map do |raw_user|
+      User.create(**raw_hash(raw_user))
+    end
+  end
+
   def self.import_from(csv_file)
     raw_users = CSV.open(csv_file, headers: true, return_headers: false).map(&:fields)
 
