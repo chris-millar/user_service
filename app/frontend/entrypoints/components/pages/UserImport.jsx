@@ -61,7 +61,7 @@ export const UserImport = () => {
               <Link to={`/users?import_id=${mutation.data.id}`}>View Users from import</Link>
             </>
           )}
-          { mutation.isError && <Alert severity="error">Error importing file: {mutation.error.message}</Alert> }
+          { mutation.isError && <Alert severity="error">Error importing file: {mutation.error.response.data.error}</Alert> }
         </>
       )}
     </>
