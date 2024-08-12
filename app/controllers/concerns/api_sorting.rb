@@ -15,7 +15,7 @@ module ApiSorting
     def apply_sort(base_scope)
       sorted_scope = base_scope
 
-      configured_sort = @@_configured_sort
+      configured_sort = self.class.configured_sort
 
       value = params.permit(:sort_order)[:sort_order] || configured_sort.default
       model_field_name = configured_sort.aliases || configured_sort.field
@@ -28,14 +28,16 @@ module ApiSorting
   end
 
   class_methods do
-    @@_configured_sort = nil
-
     def sort_via(field, default: :asc, aliases: nil)
-      @@_configured_sort = OpenStruct.new(
+      @configured_sort = OpenStruct.new(
           field: field,
           default: default,
           aliases: aliases
         )
+    end
+
+    def configured_sort
+      @configured_sort
     end
   end
 end
