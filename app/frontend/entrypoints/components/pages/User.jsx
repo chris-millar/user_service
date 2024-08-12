@@ -1,6 +1,6 @@
 import React from 'react';
 import { DateTime } from 'luxon';
-import { useParams } from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { DateField } from '@mui/x-date-pickers/DateField';
@@ -14,6 +14,36 @@ const Field = ({label, value}) => {
     <TextField disabled variant="outlined" defaultValue={value} label={label}/>
   )
 }
+
+const UserImportLinkField = ({ label, importId }) => {
+  return (
+    <Box position="relative" display="inline-block">
+      <TextField
+        defaultValue={importId}
+        disabled
+        fullWidth
+        label={label}
+      />
+      <Link
+        to={`/imports/${importId}`}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          textDecoration: 'none',
+          color: 'inherit',
+          pointerEvents: importId ? 'auto' : 'none',
+        }}
+      >
+      </Link>
+    </Box>
+  );
+};
 
 export const User = () => {
   const { id } = useParams();
@@ -37,7 +67,7 @@ export const User = () => {
         <Field label={"City"} value={user.city}/>
         <Field label={"Country"} value={user.country}/>
         <DateField disabled label={"Date Created"} defaultValue={DateTime.fromISO(user.date_created)} />
-        <Field label={"Import ID"} value={user.import_id}/>
+        <UserImportLinkField label={"Import ID"} importId={user.import_id}/>
       </Stack>
     </>
   );
