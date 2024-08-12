@@ -54,7 +54,12 @@ export const UserImport = () => {
             onClick={() => mutation.mutate( {file: selectedFile })}
           >Import File!</Button>
           { mutation.isLoading && <CircularProgress>Importing...</CircularProgress> }
-          { mutation.isSuccess && <Alert severity="success">Import was successful!</Alert> }
+          { mutation.isSuccess && (
+            <>
+              <Alert severity="success">Import was successful!</Alert>
+              <p>View imported records</p>
+            </>
+          )}
           { mutation.isError && <Alert severity="error">Error importing file: {mutation.error.message}</Alert> }
         </>
       )}

@@ -10,9 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_06_140311) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_12_165233) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "imports", force: :cascade do |t|
+    t.string "filename"
+    t.integer "record_count"
+    t.string "status"
+    t.datetime "performed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "first_name"
@@ -23,7 +32,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_06_140311) do
     t.string "city"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "import_id"
+    t.index ["import_id"], name: "index_users_on_import_id"
     t.index ["profession"], name: "index_users_on_profession"
   end
 
+  add_foreign_key "users", "imports"
 end

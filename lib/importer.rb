@@ -1,10 +1,19 @@
 class Importer
   def self.import(csv_file)
-    raw_users = CSV.parse(csv_file, headers: true, return_headers: false).map(&:fields)
+    csv_content = csv_file.read
+    raw_users = CSV.parse(csv_content, headers: true, return_headers: false).map(&:fields)
 
-    raw_users.map do |raw_user|
-      User.create(**raw_hash(raw_user))
+    import = Import.create(filename: csv_file.original_filename, status: "init", performed_at: Time.now)
+    begin
+      created_users = raw_users.map do |raw_user|
+        User.create(import_id: import.id, **raw_hash(raw_user))
+      end
+      import.update(status: "done", record_count: created_users.size)
+
+    rescue => e
+      import.update(status: "error")
     end
+    import
   end
 
   def self.import_from(csv_file)
