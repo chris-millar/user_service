@@ -1,4 +1,4 @@
-class UserSerializer < ActiveModel::Serializer
+class ImportSerializer < ActiveModel::Serializer
   attributes :id, :filename, :record_count, :status, :performed_at
 
   def performed_at
