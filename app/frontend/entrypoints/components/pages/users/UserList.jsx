@@ -82,10 +82,10 @@ export const UserList = () => {
             minDate={minDateFilter?.plus({ days: 1 })}
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={1}>
           <TextField
             id="import-filter"
-            label="Import ID Filter"
+            label="Import ID"
             variant="outlined"
             margin="normal"
             size="small"
