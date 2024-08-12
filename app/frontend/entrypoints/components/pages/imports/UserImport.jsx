@@ -1,14 +1,9 @@
 import React, {useMemo, useRef, useState} from 'react';
 import { styled } from '@mui/material/styles';
-import Button from '@mui/material/Button';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { Typography } from '@mui/material';
-import Alert from '@mui/material/Alert';
-import CircularProgress from '@mui/material/CircularProgress';
-import { Link, useSearchParams } from 'react-router-dom';
-import { useImportMutation, useImportsQuery } from '../../../services/importServices';
+import { useImportsQuery } from '../../../services/importServices';
 import { DataGrid } from '@mui/x-data-grid';
 import { columns } from './gridConfig';
+import { NewImport } from './NewImport';
 
 const PAGE_SIZE = 50;
 
@@ -25,17 +20,6 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 export const UserImport = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
-
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setSelectedFile(file);
-    }
-  };
-
-  // const [searchParams] = useSearchParams();
-  // const initialImportId = searchParams.get('import_id')
   const [filenameFilter, setFilenameFilter] = useState(null);
   const [minPerformedAtFilter, setMinPerformedAtFilter] = useState(null);
   const [maxPerformedAtFilter, setMaxPerformedAtFilter] = useState(null);
@@ -65,47 +49,9 @@ export const UserImport = () => {
     return rowCountRef.current;
   }, [data?.pageInfo.totalImports]);
 
-  const mutation = useImportMutation({
-    onSuccess: () => {
-      refetchImports()
-    }
-  });
-
   return (
     <>
-      <div>
-        <Button
-          component="label"
-          role={undefined}
-          variant="contained"
-          tabIndex={-1}
-          startIcon={<CloudUploadIcon/>}
-        >
-          Upload file
-          <VisuallyHiddenInput type="file" onChange={handleFileChange}/>
-        </Button>
-        {selectedFile && (
-          <>
-            <Typography variant="body1" style={{marginTop: '10px'}}>
-              Selected File: {selectedFile.name}
-            </Typography>
-            <Button
-              component="label"
-              variant="contained"
-              onClick={() => mutation.mutate({file: selectedFile})}
-            >Import File!</Button>
-            {mutation.isLoading && <CircularProgress>Importing...</CircularProgress>}
-            {mutation.isSuccess && (
-              <>
-                <Alert severity="success">Import was successful!</Alert>
-                <Link to={`/users?import_id=${mutation.data.id}`}>View Users from import</Link>
-              </>
-            )}
-            {mutation.isError &&
-              <Alert severity="error">Error importing file: {mutation.error.response.data.error}</Alert>}
-          </>
-        )}
-      </div>
+      <NewImport refetchImports={() => refetchImports()} />
       <div style={{height: 450, width: '100%'}}>
         <DataGrid
           rows={data?.imports || []}
