@@ -1,7 +1,9 @@
+import React from 'react';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import { DateField } from '@mui/x-date-pickers/DateField';
-import React from 'react';
+import { FilterAlt } from '@mui/icons-material';
+import { InputAdornment, Typography } from '@mui/material';
 
 export const UserListFilters = ({
    setProfessionFilter,
@@ -14,7 +16,9 @@ export const UserListFilters = ({
 }) => {
   return (
     <>
-      Custom Filters
+      <Typography variant="body1" style={{marginTop: '10px'}}>
+        Custom Filters
+      </Typography>
       <Grid container spacing={2}>
         <Grid item xs={4}>
           <TextField
@@ -25,8 +29,15 @@ export const UserListFilters = ({
             size="small"
             onChange={(e) => {
               setProfessionFilter(e.target.value)
-            }
-            }/>
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <FilterAlt />
+                </InputAdornment>
+              ),
+            }}
+          />
         </Grid>
         <Grid item xs={3}>
           <DateField
@@ -39,6 +50,13 @@ export const UserListFilters = ({
               setMinDateFilter(value)
             }}
             maxDate={maxDateFilter?.minus({ days: 1 })}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <FilterAlt />
+                </InputAdornment>
+              ),
+            }}
           />
         </Grid>
         <Grid item xs={3}>
@@ -52,6 +70,13 @@ export const UserListFilters = ({
               setMaxDateFilter(value)
             }}
             minDate={minDateFilter?.plus({ days: 1 })}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <FilterAlt />
+                </InputAdornment>
+              ),
+            }}
           />
         </Grid>
         <Grid item xs={1}>
@@ -65,6 +90,13 @@ export const UserListFilters = ({
             defaultValue={initialImportId}
             onChange={(e) => {
               setImportIdFilter(e.target.value)
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <FilterAlt />
+                </InputAdornment>
+              ),
             }}
           />
         </Grid>
