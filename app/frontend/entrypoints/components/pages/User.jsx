@@ -37,6 +37,7 @@ export const User = () => {
         <Field label={"City"} value={user.city}/>
         <Field label={"Country"} value={user.country}/>
         <DateField disabled label={"Date Created"} defaultValue={DateTime.fromISO(user.date_created)} />
+        <Field label={"Import ID"} value={user.import_id}/>
       </Stack>
     </>
   );

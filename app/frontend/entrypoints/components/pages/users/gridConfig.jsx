@@ -23,4 +23,5 @@ export const columns = [
     valueFormatter: (isoString) => DateTime.fromISO(isoString).toLocaleString(DateTime.DATE_SHORT),
     sortComparator: (dateTime1, dateTime2) => dateTime1.toMillis() - dateTime2.toMillis(),
   },
+  { field: 'import_id', headerName: 'Import ID', type: 'number', width: 75 }
 ];
