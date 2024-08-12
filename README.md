@@ -23,7 +23,8 @@ Returns `200` with the given User in the payload
   "country": "Greece",
   "city": "Santo Domingo",
   "date_created": "2022-01-04T00:00:00Z",
-  "date_updated": "2024-08-06T13:37:41Z"
+  "date_updated": "2024-08-06T13:37:41Z",
+  "import_id": 1
 }
 ```
 Returns `404` with the payload
@@ -66,7 +67,8 @@ GET `/api/users?date_created[gte]=2020-01-01&date_created[lt]=2024-03-01&sort_or
       "country": "Greenland",
       "city": "Banjul",
       "date_created": "2022-07-18T00:00:00Z",
-      "date_updated": "2024-08-06T13:37:40Z"
+      "date_updated": "2024-08-06T13:37:40Z",
+      "import_id": 1
     },
     {
       "id": 910,
@@ -77,7 +79,8 @@ GET `/api/users?date_created[gte]=2020-01-01&date_created[lt]=2024-03-01&sort_or
       "country": "Belize",
       "city": "Majuro",
       "date_created": "2022-07-13T00:00:00Z",
-      "date_updated": "2024-08-06T13:37:49Z"
+      "date_updated": "2024-08-06T13:37:49Z",
+      "import_id": null
     }
   ],
   "metadata": {
@@ -152,6 +155,10 @@ so that means date range operations will be tracked with a separate key for each
   "date_created[lt]": {
     "value": "2024-03-01",
     "operator": "lt"
+  },
+  "import_id": {
+    "value": 1,
+    "operator": "eq"
   }
 },
 ```
@@ -167,7 +174,7 @@ Will always be included even if no sort param is specified. Defaults to `:asc`
 </details>
 
 ### Query params can specify:
-* Filtering by profession and/or date_created
+* Filtering by profession, date_created, and/or import_id
 * Sorting direction (though it will always sort by created_date)
 * Pagination detail for what page you want and what page size you want, defaults to `25` records per page.
 
@@ -258,23 +265,3 @@ rspec
 # this does hot loading of React changes for your localhost app
 bin/vite dev
 ```
-
-Todo:
-- [x] get app started with react served
-- [x] add User model
-- [x] add show endpoint
-- [x] Handle errors in UsersController#show
-- [x] add FactoryBot for testing
-- [x] Implement UsersController#index
-- [x] Implement date created range filter for UsersController#index
-- [x] Implement profession filter for UsersController#index
-- [ ] decide on custom endpoint + implement
-- [x] write import script (or do this as the other endpoint?)
-- [x] UX: create User component
-- [x] UX: create list view of Users
-- [ ] UX: create filter for date range
-- [ ] UX: create profession filter
-- [ ] UX: for custom endpoint(s)
-- [ ] reproducible deployment
-- [ ] document API
-- [ ] document learnings/feedback
