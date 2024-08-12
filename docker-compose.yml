@@ -1,35 +1,13 @@
 version: '3.8'
 
 services:
-  web:
-    image: user_service:latest
-    container_name: user_service
-    build:
-      context: .
-      dockerfile: Dockerfile
-    command: bundle exec rails server -b 0.0.0.0 -p 3000
-    volumes:
-      - .:/app
-    expose:
-      - "3000"
-    environment:
-      - RAILS_ENV=development
-      - RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
-      - DATABASE_USER=postgres
-      - DATABASE_PASSWORD=password
-      - DATABASE_NAME=user_service_development
-      - DATABASE_HOST=db
-      - VITE_RUBY_HOST=vite
-    depends_on:
-      - db
-    networks:
-      - app_network
-
   db:
     image: postgres:16-alpine
     container_name: user_service_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
@@ -37,27 +15,41 @@ services:
     networks:
       - app_network
 
-  vite:
-    container_name: user_service_vite
+  web:
     build: .
+    container_name: user_service
+    depends_on:
+      - vite
+      - db
+    entrypoint: ./docker-rails.sh
     environment:
-      DEBUG: '*vite*'
       RAILS_ENV: development
-      VITE_RUBY_HOST: 0.0.0.0
+      VITE_RUBY_HOST: vite
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
       DATABASE_USER: postgres
       DATABASE_PASSWORD: password
       DATABASE_NAME: user_service_development
-      DISABLE_DATABASE_ENVIRONMENT_CHECK: 1
       DATABASE_HOST: db
-    command: bin/vite dev
     ports:
-      - '3036:3036'
+      - "3000:3000"
     volumes:
       - .:/app
     networks:
       - app_network
-    depends_on:
-      - web
+
+  vite:
+    build: .
+    command: ./docker-vite.sh
+    environment:
+      DEBUG: '*vite*'
+      RAILS_ENV: development
+      VITE_RUBY_HOST: 0.0.0.0
+    ports:
+      - "3036:3036"
+    volumes:
+      - .:/app
+    networks:
+      - app_network
 
   nginx:
     image: nginx:alpine

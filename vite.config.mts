@@ -6,7 +6,8 @@ export default defineConfig({
     RubyPlugin(),
   ],
   server: {
-    host: 'localhost',
-    port: 3036,
+    proxy: {
+      '/api': 'http://web:3000',
+    },
   },
 })
