@@ -185,6 +185,144 @@ Filtering by `date_created`
 i.e. `api/users?date_created[gte]=2020-01-01&date_created[lt]=2020-03-01`
 * can provide a single value for exact date match, i.e. `api/users?date_created=2020-01-01`
 
+## GET `/api/imports/:id`
+Returns `200` with the given Import in the payload
+
+* status: can be one of `[:init, :error, :done]`
+
+```
+{
+  "id": 1,
+  "filename": "custom_file.csv",
+  "record_count": 2,
+  "status": "done",
+  "performed_at": "2024-08-12T17:13:38Z"
+}
+```
+Returns `404` with the payload
+```
+{
+    "error": "No record found!"
+}
+```
+
+## GET `/api/imports`
+Returns `200` with all Users sorted by id in `:asc` order by default.
+
+### Result schema
+<details>
+<summary>see details</summary>
+
+#### Overview
+```
+{
+"data": [importOne, importTwo, ...],
+"metadata": {
+  "paging": {},
+  "filters": {},
+  "sort": {}
+}
+}
+```
+
+#### Real Example Response
+GET `http://localhost:3000/api/imports?filename=custom_file.csv&status=done&page_limit=2`
+```
+{
+  "data": [
+    {
+      "id": 1,
+      "filename": "custom_file.csv",
+      "record_count": 2,
+      "status": "done",
+      "performed_at": "2024-08-12T17:13:38Z"
+    },
+    {
+      "id": 7,
+      "filename": "custom_file.csv",
+      "record_count": 2,
+      "status": "done",
+      "performed_at": "2024-08-12T17:22:07Z"
+    }
+  ],
+  "metadata": {
+    "paging": {
+      "page": 1,
+      "prev": null,
+      "next": 2,
+      "last": 7,
+      "count": 14,
+      "pages": 7,
+      "limit": 2
+    },
+    "filters": {
+      "filename": {
+        "value": "custom_file.csv",
+        "operator": "eq"
+      },
+      "status": {
+        "value": "done",
+        "operator": "eq"
+      }
+    },
+    "sort": {
+      "id": "asc"
+    }
+  }
+}
+```
+
+#### paging
+Will always be included even if there are no results
+
+See /users Paging section above for more details.
+
+#### filters
+Will be empty `{}` if there were no applied filters. Includes a key for each distinct filter+operator, 
+so that means date range operations will be tracked with a separate key for each like `field[operator]`. 
+
+* `key`: either the `field` or `field[operator]` that the filter is being applied to
+* `value`: the value being compared to
+* `operator`: how the records in the db are compared to the specified value, supports `[eq, in, gt, gte, lte, gt, lt]`
+```
+"filters": {
+  "filename": {
+    "value": "custom_file.csv",
+    "operator": "eq"
+  },
+  "status": {
+    "value": "done",
+    "operator": "eq"
+  }
+},
+```
+#### sort
+Will always be included even if no sort param is specified. Defaults to `:asc`
+* `key`: what field was sorted by
+* `value`: what the sort order was, `[asc, desc]`
+```
+"sort": {
+  "date_created": "desc"
+}
+```
+</details>
+
+### Query params can specify:
+* Filtering by filename, performed_at, and/or status
+* Sorting direction (though it will always sort by id)
+* Pagination detail for what page you want and what page size you want, defaults to `25` records per page.
+
+Filtering by `performed_at`
+* uses the date format `YYYY-MM-DD`
+* can have multiple operations applied using `[gt, gte, lt, lte]` 
+(greater than, greater than or equal, etc...) 
+i.e. `api/imports?date_created[gte]=2020-01-01&date_created[lt]=2020-03-01`
+* can provide a single value for exact date match, i.e. `api/imports?date_created=2020-01-01`
+
+
+## POST `/api/imports`
+
+
 
 # CSV Tools
 This app provides 2 tools that can be run inside a `rails console` for ingesting users from a csv file and for 
@@ -253,15 +391,29 @@ rails db:migrate
 
 # Run tests
 ```
-rspec
+bundle exec rspec
 ```
 
 # Run local
+You must have postgres exposed at post 5432 with a user:postgres, password:password
+(note: you can run just the db via docker-compose by running docker-compose up db)
+You must ensure your local ENV sets the following properties
+* EXECJS_RUNTIME=Node
+* DATABASE_HOST=localhost
+* DATABASE_USER=postgres
+* DATABASE_PASSWORD=password
 ```
 # run the api/web host server
-./bin/dev
+bundle exec rails s -p 3000
 
 # run the vite dev server
 # this does hot loading of React changes for your localhost app
 bin/vite dev
+```
+
+## run with docker-compose
+You can run vite, rails, and postgress, in a dev env, by using the provided docker-compose setup.
+
+```
+  docker-compose up --build
 ```
