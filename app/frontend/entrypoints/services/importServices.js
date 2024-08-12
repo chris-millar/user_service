@@ -25,7 +25,10 @@ const fetchImport = async (id) => {
 };
 
 export const useImportQuery = (id) => {
-  return useQuery({ queryFn: () => fetchImport(id) });
+  return useQuery({
+    queryFn: () => fetchImport(id),
+    queryKey: ['import', id],
+  });
 };
 
 const fetchImports = async (page, pageSize, filters) => {

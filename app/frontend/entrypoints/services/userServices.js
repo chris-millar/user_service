@@ -7,7 +7,10 @@ const fetchUser = async (id) => {
 };
 
 export const useUserQuery = (id) => {
-  return useQuery({ queryFn: () => fetchUser(id) });
+  return useQuery({
+    queryFn: () => fetchUser(id),
+    queryKey: ['user', id],
+  });
 };
 
 const fetchUsers = async (page, pageSize, filters) => {
