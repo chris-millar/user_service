@@ -3,6 +3,7 @@ class Api::UsersController < ApiController
   filter :profession, :optional, type: String, operators: [:eq]
   filter :date_created, :optional, type: Hash, operators: [:gte, :gt, :lt, :lte], aliases: :created_at
   filter :date_created, :optional, type: String, operators: [:eq], aliases: :created_at
+  filter :import_id, :optional, type: String, operators: [:eq]
 
   sort_via :date_created, default: :asc, aliases: :created_at
 

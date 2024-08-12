@@ -12,6 +12,7 @@ export const UserList = () => {
   const [professionFilter, setProfessionFilter] = useState(null);
   const [minDateFilter, setMinDateFilter] = useState(null);
   const [maxDateFilter, setMaxDateFilter] = useState(null);
+  const [importIdFilter, setImportIdFilter] = useState(null);
 
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
@@ -24,7 +25,8 @@ export const UserList = () => {
       filters: {
         professionFilter,
         minDateFilter,
-        maxDateFilter
+        maxDateFilter,
+        importIdFilter
       }
     }
   );
@@ -78,6 +80,18 @@ export const UserList = () => {
               setMaxDateFilter(value)
             }}
             minDate={minDateFilter?.plus({ days: 1 })}
+          />
+        </Grid>
+        <Grid item xs={3}>
+          <TextField
+            id="import-filter"
+            label="Import ID Filter"
+            variant="outlined"
+            margin="normal"
+            size="small"
+            onChange={(e) => {
+              setImportIdFilter(e.target.value)
+            }}
           />
         </Grid>
       </Grid>
