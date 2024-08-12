@@ -4,6 +4,7 @@ import TextField from '@mui/material/TextField';
 
 export const Home = () => {
   const [userId, setUserId] = useState('');
+  const [importId, setImportId] = useState('');
 
   return (
     <>
@@ -12,9 +13,11 @@ export const Home = () => {
       The following features are currently available:
       <ul>
         <li>
-          <div style={{ display: "flex", alignItems: "center"}}>
-            <div>Viewing a single user via <Link to={`/users/${userId}`}>{`/users/${userId}`}</Link> for a specified ID </div>
-            <TextField label="id" size="small" onChange={(e) => setUserId(e.target.value)}/>
+          <div style={{display: "flex", alignItems: "center"}}>
+            <div>Viewing a single user via <Link to={`/users/${userId}`}>{`/users/${userId}`}</Link> for a specified ID
+            </div>
+            &nbsp;&nbsp;
+            <TextField style={{width: "75px"}} label="id" size="small" onChange={(e) => setUserId(e.target.value)}/>
           </div>
         </li>
         <li>
@@ -38,9 +41,18 @@ export const Home = () => {
           </ul>
         </li>
         <li>
-          Importing a csv of Users from your machine via
+          <div style={{display: "flex", alignItems: "center"}}>
+            <div>Viewing a single import via&nbsp;&nbsp;<Link to={`/imports/${importId}`}>{`/imports/${importId}`}</Link> for a specified ID
+            </div>
+            &nbsp;&nbsp;
+            <TextField style={{width: "75px"}} label="id" size="small" onChange={(e) => setImportId(e.target.value)}/>
+          </div>
+        </li>
+        <li>
+          Viewing previous Imports and starting a new one from a csv of Users from your machine via
+          &nbsp;
           <Link to={`/imports`}>
-            Imports
+            /imports
           </Link>
         </li>
       </ul>
