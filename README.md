@@ -1,6 +1,8 @@
 # User Service
-This is a service that maintains users. It exposes both a React UI and APIs for interacting with the users. 
+This is a service that maintains users. It exposes both a React UI and APIs for interacting with the users and imports.
 It also provides helper tools for Importing users from a CSV as well as a tool to generate a new CSV with faked data.
+
+![img.png](img.png)
 
 # API
 * Response `dates` are returned in `iso8601` format for the `UTC` timezone. They include the time component,
@@ -395,19 +397,26 @@ bundle exec rspec
 ```
 
 # Run local
+## run yourself
 You must have postgres exposed at post 5432 with a user:postgres, password:password
-(note: you can run just the db via docker-compose by running docker-compose up db)
+<p>
+note: you can run just the db via docker-compose by running docker-compose up db
+</p>
 You must ensure your local ENV sets the following properties
 * EXECJS_RUNTIME=Node
 * DATABASE_HOST=localhost
 * DATABASE_USER=postgres
 * DATABASE_PASSWORD=password
-```
-# run the api/web host server
-bundle exec rails s -p 3000
 
-# run the vite dev server
-# this does hot loading of React changes for your localhost app
+### run the api/web host server
+
+```
+bundle exec rails s -p 3000
+```
+
+### run the vite dev server
+this does hot loading of React changes for your localhost app
+```
 bin/vite dev
 ```
 
