@@ -23,7 +23,7 @@ export const UserListFilters = ({
         <Grid item xs={4}>
           <TextField
             id="profession-filter"
-            label="Profession Filter"
+            label="Profession"
             variant="outlined"
             margin="normal"
             size="small"

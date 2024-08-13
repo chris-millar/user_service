@@ -133,6 +133,10 @@ export const Home = () => {
               <Typography variant="body2">
                 View all previous Imports.
                 You can also upload a new csv and import those users into the system.
+                <p>
+                  The CSV must have the following columns in order:
+                [id, firstName, lastName, email, profession, createdDate, country, city]
+                </p>
               </Typography>
             </CardContent>
             <CardActions sx={{ paddingLeft: '16px', paddingBottom: '16px' }}>
