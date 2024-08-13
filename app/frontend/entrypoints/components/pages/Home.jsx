@@ -12,7 +12,7 @@ export const Home = () => {
   return (
     <>
       <Typography variant="h2" component="h2" gutterBottom>
-        Landing Page for the User Service app
+        User Service app
       </Typography>
       <Typography variant="body1" paragraph>
         The following features are currently available:
