@@ -104,6 +104,13 @@ export const NewImport = ({ refetchImports }) => {
                   </Typography>
                 )}
 
+                {mutation.isPending && (
+                  <Box sx={{ display: 'flex', justifyContent: 'left', mt: 2, alignItems: 'center' }}>
+                    <CircularProgress />
+                    <Typography sx={{ ml: 2 }}>Importing...</Typography>
+                  </Box>
+                )}
+
                 <Box
                   sx={{
                     display: 'flex',
@@ -114,23 +121,17 @@ export const NewImport = ({ refetchImports }) => {
                   }}
                 >
                   <Button variant="outlined" onClick={closeModal} sx={{ mr: 2 }}>
-                    Cancel
+                    { mutation.isSuccess ? "Close" : "Cancel" }
                   </Button>
                   <Button
                     component="label"
                     variant="contained"
                     onClick={() => mutation.mutate({ file: selectedFile })}
+                    disabled={ mutation.isSuccess || mutation.isPending }
                   >
                     Complete Import
                   </Button>
                 </Box>
-
-                {mutation.isLoading && (
-                  <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-                    <CircularProgress />
-                    <Typography sx={{ ml: 2 }}>Importing...</Typography>
-                  </Box>
-                )}
               </>
             )}
           </Box>
