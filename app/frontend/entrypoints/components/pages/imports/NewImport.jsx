@@ -79,25 +79,58 @@ export const NewImport = ({ refetchImports }) => {
           aria-describedby="modal-modal-description"
         >
           <Box sx={style}>
+            {mutation.isSuccess && (
+              <Alert severity="success" sx={{ mb: 2 }}>
+                Import was successful!
+              </Alert>
+            )}
+            {mutation.isError && (
+              <Alert severity="error" sx={{ mb: 2 }}>
+                Error importing file: {mutation.error.response.data.error}
+              </Alert>
+            )}
+
             {selectedFile && (
               <>
-                <Typography variant="body1" style={{marginTop: '10px'}}>
+                <Typography variant="body1" sx={{ mt: 2 }}>
                   Selected File: {selectedFile.name}
                 </Typography>
-                <Button
-                  component="label"
-                  variant="contained"
-                  onClick={() => mutation.mutate({file: selectedFile})}
-                >Import File!</Button>
-                {mutation.isLoading && <CircularProgress>Importing...</CircularProgress>}
+
                 {mutation.isSuccess && (
-                  <>
-                    <Alert severity="success">Import was successful!</Alert>
-                    <Link to={`/users?import_id=${mutation.data.id}`}>View Users from import</Link>
-                  </>
+                  <Typography variant="body2" sx={{ mt: 2 }}>
+                    <Link to={`/users?import_id=${mutation.data.id}`}>
+                      View Users from import
+                    </Link>
+                  </Typography>
                 )}
-                {mutation.isError &&
-                  <Alert severity="error">Error importing file: {mutation.error.response.data.error}</Alert>}
+
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    mt: 4,
+                    borderTop: '1px solid #ddd',
+                    pt: 2,
+                  }}
+                >
+                  <Button variant="outlined" onClick={closeModal} sx={{ mr: 2 }}>
+                    Cancel
+                  </Button>
+                  <Button
+                    component="label"
+                    variant="contained"
+                    onClick={() => mutation.mutate({ file: selectedFile })}
+                  >
+                    Complete Import
+                  </Button>
+                </Box>
+
+                {mutation.isLoading && (
+                  <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+                    <CircularProgress />
+                    <Typography sx={{ ml: 2 }}>Importing...</Typography>
+                  </Box>
+                )}
               </>
             )}
           </Box>
